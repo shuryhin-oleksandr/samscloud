@@ -1,0 +1,7 @@
+*.sqlite3
+media/
+*.db
+*.pid
+.idea/
+*.iws /out/
+samscloud_api/local.py

@@ -1,0 +1,8 @@
+
+Incident Reporting
+Dear {{ user_name }}
+
+{{ incident_user }} reporing an incident
+<a href="{{ incident_url }}"> click here to stream </a><
+Thank You,
+SamsCloud Support

@@ -1,0 +1,10 @@
+Notification
+
+Dear {{ first_name }},
+Welcome to Samscloud
+
+This is to inform you that, your Contact has been added to {{ organization_name }} organization by {{ current_user }}
+
+Thank You,
+
+SamsCloud Support

@@ -1,0 +1,10 @@
+Emergency contact status
+Dear {{ user_name }},
+
+    {{ incident_user }} {{reason}} the emergency contact request.
+
+
+Thank You,
+
+Samscloud Support
+

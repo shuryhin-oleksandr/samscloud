@@ -1,0 +1,121 @@
+[2020-02-06 19:49:12,746: INFO/MainProcess] Connected to redis://localhost:6379//
+[2020-02-06 19:49:12,754: INFO/MainProcess] mingle: searching for neighbors
+[2020-02-06 19:49:13,781: INFO/MainProcess] mingle: all alone
+[2020-02-06 19:49:13,790: WARNING/MainProcess] /home/ubuntu/samscloud-api/samscloud_api/envs/samscloud-api/lib/python3.6/site-packages/celery/fixups/django.py:202: UserWarning: Using settings.DEBUG leads to a memory leak, never use this setting in production environments!
+  warnings.warn('Using settings.DEBUG leads to a memory leak, never '
+[2020-02-06 19:49:13,790: INFO/MainProcess] celery@ip-172-31-5-183 ready.
+[2020-02-06 20:02:12,236: INFO/MainProcess] Received task: send_email_for_user[5e410747-4fba-47d1-8a49-3344b1e75689]  
+[2020-02-06 20:02:12,943: INFO/ForkPoolWorker-1] Task send_email_for_user[5e410747-4fba-47d1-8a49-3344b1e75689] succeeded in 0.7055696629995509s: None
+[2020-02-07 05:17:01,427: INFO/MainProcess] Received task: send_email_for_user[c8d9747b-a759-4397-8965-3a22fd548f2d]  
+[2020-02-07 05:17:02,249: INFO/ForkPoolWorker-1] Task send_email_for_user[c8d9747b-a759-4397-8965-3a22fd548f2d] succeeded in 0.8208339069969952s: None
+[2020-02-07 05:18:08,018: INFO/MainProcess] Received task: send_email_for_user[6e19b12a-12a0-45de-9979-15fbda079a1f]  
+[2020-02-07 05:18:08,568: INFO/ForkPoolWorker-1] Task send_email_for_user[6e19b12a-12a0-45de-9979-15fbda079a1f] succeeded in 0.5489246489960351s: None
+[2020-02-07 05:30:30,912: INFO/MainProcess] Received task: send_email_for_user[fa62e49b-0034-4caf-a7f3-cf38c8eec76b]  
+[2020-02-07 05:30:31,819: INFO/ForkPoolWorker-1] Task send_email_for_user[fa62e49b-0034-4caf-a7f3-cf38c8eec76b] succeeded in 0.9060485829977551s: None
+[2020-02-07 05:33:29,276: INFO/MainProcess] Received task: send_email_for_user[9141c769-2794-4ace-a7b4-7c192d8b6226]  
+[2020-02-07 05:33:29,940: INFO/ForkPoolWorker-1] Task send_email_for_user[9141c769-2794-4ace-a7b4-7c192d8b6226] succeeded in 0.6636109740065876s: None
+[2020-02-07 06:48:41,020: INFO/MainProcess] Received task: send_twilio_sms[a77c5edc-7065-4e86-aabf-a70767244215]  
+[2020-02-07 06:48:41,094: INFO/ForkPoolWorker-1] POST Request: https://api.twilio.com/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages.json
+[2020-02-07 06:48:41,094: INFO/ForkPoolWorker-1] PAYLOAD: {'To': '+19205767189', 'From': '+18435644306', 'Body': 'Your verification code is 9294'}
+[2020-02-07 06:48:41,571: INFO/ForkPoolWorker-1] POST Response: 201 {"sid": "SM3ed88fdccf884c54bd1b3c3b2261fe5b", "date_created": "Fri, 07 Feb 2020 06:48:41 +0000", "date_updated": "Fri, 07 Feb 2020 06:48:41 +0000", "date_sent": null, "account_sid": "AC312670938b6c00dcb306caedd1e82abc", "to": "+19205767189", "from": "+18435644306", "messaging_service_sid": null, "body": "Your verification code is 9294", "status": "queued", "num_segments": "1", "num_media": "0", "direction": "outbound-api", "api_version": "2010-04-01", "price": null, "price_unit": "USD", "error_code": null, "error_message": null, "uri": "/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages/SM3ed88fdccf884c54bd1b3c3b2261fe5b.json", "subresource_uris": {"media": "/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages/SM3ed88fdccf884c54bd1b3c3b2261fe5b/Media.json"}}
+[2020-02-07 06:48:41,572: WARNING/ForkPoolWorker-1] Message send successfully
+[2020-02-07 06:48:41,572: INFO/ForkPoolWorker-1] Task send_twilio_sms[a77c5edc-7065-4e86-aabf-a70767244215] succeeded in 0.5510607369942591s: None
+[2020-02-07 06:51:31,868: INFO/MainProcess] Received task: send_email_for_user[0f614002-8fd0-409f-ad5d-fe31284d73ee]  
+[2020-02-07 06:51:31,872: INFO/MainProcess] Received task: send_twilio_sms[69bcee36-f990-4163-9639-ef6ab978994c]  
+[2020-02-07 06:51:32,567: INFO/ForkPoolWorker-1] Task send_email_for_user[0f614002-8fd0-409f-ad5d-fe31284d73ee] succeeded in 0.6972289879995515s: None
+[2020-02-07 06:51:32,569: INFO/ForkPoolWorker-1] POST Request: https://api.twilio.com/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages.json
+[2020-02-07 06:51:32,569: INFO/ForkPoolWorker-1] PAYLOAD: {'To': '9634994189', 'From': '+18435644306', 'Body': "This is to inform you that, your Contact has been added to Parag's contact list.Please click this link to confirm the request http://web.samscloud.io/emergency-contact/activate?uid=3bfae96a-1669-4bcf-bd29-d47b97977093"}
+[2020-02-07 06:51:32,977: INFO/ForkPoolWorker-1] POST Response: 400 {"code": 21211, "message": "The 'To' number 9634994189 is not a valid phone number.", "more_info": "https://www.twilio.com/docs/errors/21211", "status": 400}
+[2020-02-07 06:51:32,977: WARNING/ForkPoolWorker-1] Unable to send message because of
+[2020-02-07 06:51:32,977: WARNING/ForkPoolWorker-1] HTTP 400 error: Unable to create record: The 'To' number 9634994189 is not a valid phone number.
+[2020-02-07 06:51:32,978: INFO/ForkPoolWorker-1] Task send_twilio_sms[69bcee36-f990-4163-9639-ef6ab978994c] succeeded in 0.40976277400477557s: None
+[2020-02-07 06:52:45,152: INFO/MainProcess] Received task: send_email_for_user[70667686-08ff-4758-a3a6-3aaff7f9d250]  
+[2020-02-07 06:52:45,157: INFO/MainProcess] Received task: send_twilio_sms[8a46dea1-b780-4095-a984-7e218f5c42e9]  
+[2020-02-07 06:52:45,446: INFO/ForkPoolWorker-1] Task send_email_for_user[70667686-08ff-4758-a3a6-3aaff7f9d250] succeeded in 0.2938150229965686s: None
+[2020-02-07 06:52:45,448: INFO/ForkPoolWorker-1] POST Request: https://api.twilio.com/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages.json
+[2020-02-07 06:52:45,448: INFO/ForkPoolWorker-1] PAYLOAD: {'To': '9882221022', 'From': '+18435644306', 'Body': "This is to inform you that, your Contact has been added to Parag's contact list.Please click this link to confirm the request http://web.samscloud.io/emergency-contact/activate?uid=0a78230b-9d75-4065-aba4-85d4068b1c54"}
+[2020-02-07 06:52:45,782: INFO/ForkPoolWorker-1] POST Response: 400 {"code": 21211, "message": "The 'To' number 9882221022 is not a valid phone number.", "more_info": "https://www.twilio.com/docs/errors/21211", "status": 400}
+[2020-02-07 06:52:45,782: WARNING/ForkPoolWorker-1] Unable to send message because of
+[2020-02-07 06:52:45,782: WARNING/ForkPoolWorker-1] HTTP 400 error: Unable to create record: The 'To' number 9882221022 is not a valid phone number.
+[2020-02-07 06:52:45,783: INFO/ForkPoolWorker-1] Task send_twilio_sms[8a46dea1-b780-4095-a984-7e218f5c42e9] succeeded in 0.3357286769969505s: None
+[2020-02-07 08:08:24,984: INFO/MainProcess] Received task: send_email_for_user[03bab5f1-bbf7-4eb6-8cd1-3c710b476efd]  
+[2020-02-07 08:08:25,737: INFO/ForkPoolWorker-1] Task send_email_for_user[03bab5f1-bbf7-4eb6-8cd1-3c710b476efd] succeeded in 0.7517116419985541s: None
+[2020-02-07 08:09:46,449: INFO/MainProcess] Received task: send_email_for_user[084aa495-8c4e-48c9-9f3c-8f01c74c4e9a]  
+[2020-02-07 08:09:46,961: INFO/ForkPoolWorker-1] Task send_email_for_user[084aa495-8c4e-48c9-9f3c-8f01c74c4e9a] succeeded in 0.5115392459993018s: None
+[2020-02-07 08:10:02,606: INFO/MainProcess] Received task: send_email_for_user[1909e549-f0da-455e-b0d9-778da47d7408]  
+[2020-02-07 08:10:03,100: INFO/ForkPoolWorker-1] Task send_email_for_user[1909e549-f0da-455e-b0d9-778da47d7408] succeeded in 0.493007260003651s: None
+[2020-02-07 08:10:57,816: INFO/MainProcess] Received task: send_email_for_user[89a1a597-9da2-4a27-96fe-ba56aac8da89]  
+[2020-02-07 08:10:58,544: INFO/ForkPoolWorker-1] Task send_email_for_user[89a1a597-9da2-4a27-96fe-ba56aac8da89] succeeded in 0.7274593110050773s: None
+[2020-02-07 10:14:04,904: INFO/MainProcess] Received task: send_email_for_user[8919df87-e3eb-49e7-a105-057258bbe9df]  
+[2020-02-07 10:14:05,206: INFO/ForkPoolWorker-1] Task send_email_for_user[8919df87-e3eb-49e7-a105-057258bbe9df] succeeded in 0.30070995199639583s: None
+[2020-02-07 10:43:14,337: INFO/MainProcess] Received task: send_email_for_user[1760b45d-4355-458a-abaf-9082650b8d23]  
+[2020-02-07 10:43:14,730: INFO/ForkPoolWorker-1] Task send_email_for_user[1760b45d-4355-458a-abaf-9082650b8d23] succeeded in 0.39253203900443623s: None
+[2020-02-07 10:45:37,111: INFO/MainProcess] Received task: send_email_for_user[26406280-fa80-44cf-a4a9-112ac6b7f08b]  
+[2020-02-07 10:45:37,883: INFO/ForkPoolWorker-1] Task send_email_for_user[26406280-fa80-44cf-a4a9-112ac6b7f08b] succeeded in 0.7709195299976273s: None
+[2020-02-07 11:39:06,103: INFO/MainProcess] Received task: send_email_for_user[b63c86be-63c1-410a-8788-173e568bfabd]  
+[2020-02-07 11:39:06,479: INFO/ForkPoolWorker-1] Task send_email_for_user[b63c86be-63c1-410a-8788-173e568bfabd] succeeded in 0.3751838370008045s: None
+[2020-02-07 12:33:55,382: INFO/MainProcess] Received task: send_email_for_user[7b2ce1c6-215f-4b2a-a141-e6193bff3595]  
+[2020-02-07 12:33:55,704: INFO/ForkPoolWorker-1] Task send_email_for_user[7b2ce1c6-215f-4b2a-a141-e6193bff3595] succeeded in 0.32084058999316767s: None
+[2020-02-07 12:37:49,400: INFO/MainProcess] Received task: send_email_for_user[1a7ab4ed-b07c-4a4b-bf55-2f11c64673ff]  
+[2020-02-07 12:37:50,226: INFO/ForkPoolWorker-1] Task send_email_for_user[1a7ab4ed-b07c-4a4b-bf55-2f11c64673ff] succeeded in 0.8248381140001584s: None
+[2020-02-07 12:42:58,769: INFO/MainProcess] Received task: send_email_for_user[f05fb431-52a2-4498-bc01-ca1807535662]  
+[2020-02-07 12:42:59,562: INFO/ForkPoolWorker-1] Task send_email_for_user[f05fb431-52a2-4498-bc01-ca1807535662] succeeded in 0.7925586060009664s: None
+[2020-02-07 12:45:12,923: INFO/MainProcess] Received task: send_push_notification[9cb16d3f-d8cf-4c8a-8aaf-3f2ef19afd8c]  
+[2020-02-07 12:45:13,276: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 12:45:13,276: INFO/ForkPoolWorker-1] Task send_push_notification[9cb16d3f-d8cf-4c8a-8aaf-3f2ef19afd8c] succeeded in 0.35230145599052776s: None
+[2020-02-07 12:48:36,748: INFO/MainProcess] Received task: send_push_notification[a507202d-856d-46f1-8dfa-d136c4aae06f]  
+[2020-02-07 12:48:37,039: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 12:48:37,041: INFO/ForkPoolWorker-1] Task send_push_notification[a507202d-856d-46f1-8dfa-d136c4aae06f] succeeded in 0.2930720150034176s: None
+[2020-02-07 13:16:07,200: INFO/MainProcess] Received task: send_push_notification[47574ea1-31bb-407d-bb72-0f7dd201218b]  
+[2020-02-07 13:16:07,595: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 13:16:07,596: INFO/ForkPoolWorker-1] Task send_push_notification[47574ea1-31bb-407d-bb72-0f7dd201218b] succeeded in 0.39543942001182586s: None
+[2020-02-07 13:22:27,889: INFO/MainProcess] Received task: send_push_notification[1d716c48-95a3-4db9-8fb0-34d363cfacba]  
+[2020-02-07 13:22:28,289: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 13:22:28,290: INFO/ForkPoolWorker-1] Task send_push_notification[1d716c48-95a3-4db9-8fb0-34d363cfacba] succeeded in 0.39951688700239174s: None
+[2020-02-07 13:37:24,918: INFO/MainProcess] Received task: send_push_notification[bc667b40-2c8a-41a9-beca-d0f5da3750b3]  
+[2020-02-07 13:37:25,158: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 13:37:25,158: INFO/ForkPoolWorker-1] Task send_push_notification[bc667b40-2c8a-41a9-beca-d0f5da3750b3] succeeded in 0.23918251899885945s: None
+[2020-02-07 14:11:12,793: INFO/MainProcess] Received task: send_twilio_sms[2e59597d-58f0-4cc1-a46d-c7ba6dc3a559]  
+[2020-02-07 14:11:12,794: INFO/ForkPoolWorker-1] POST Request: https://api.twilio.com/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages.json
+[2020-02-07 14:11:12,794: INFO/ForkPoolWorker-1] PAYLOAD: {'To': '+919746405671', 'From': '+18435644306', 'Body': 'Your verification code is 7003'}
+[2020-02-07 14:11:13,241: INFO/ForkPoolWorker-1] POST Response: 201 {"sid": "SMb9d36298d0ef4397868b63f3b2e0e868", "date_created": "Fri, 07 Feb 2020 14:11:13 +0000", "date_updated": "Fri, 07 Feb 2020 14:11:13 +0000", "date_sent": null, "account_sid": "AC312670938b6c00dcb306caedd1e82abc", "to": "+919746405671", "from": "+18435644306", "messaging_service_sid": null, "body": "Your verification code is 7003", "status": "queued", "num_segments": "1", "num_media": "0", "direction": "outbound-api", "api_version": "2010-04-01", "price": null, "price_unit": "USD", "error_code": null, "error_message": null, "uri": "/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages/SMb9d36298d0ef4397868b63f3b2e0e868.json", "subresource_uris": {"media": "/2010-04-01/Accounts/AC312670938b6c00dcb306caedd1e82abc/Messages/SMb9d36298d0ef4397868b63f3b2e0e868/Media.json"}}
+[2020-02-07 14:11:13,241: WARNING/ForkPoolWorker-1] Message send successfully
+[2020-02-07 14:11:13,242: INFO/ForkPoolWorker-1] Task send_twilio_sms[2e59597d-58f0-4cc1-a46d-c7ba6dc3a559] succeeded in 0.4485129090026021s: None
+[2020-02-07 14:15:32,552: INFO/MainProcess] Received task: send_push_notification[9388982b-4544-4021-a692-e92e754ca199]  
+[2020-02-07 14:15:32,887: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 14:15:32,887: INFO/ForkPoolWorker-1] Task send_push_notification[9388982b-4544-4021-a692-e92e754ca199] succeeded in 0.33424004500557203s: None
+[2020-02-07 16:35:26,780: INFO/MainProcess] Received task: send_push_notification[1865b498-65a2-4bb8-a5e7-e6e92d5d055c]  
+[2020-02-07 16:35:27,141: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 16:35:27,142: INFO/ForkPoolWorker-1] Task send_push_notification[1865b498-65a2-4bb8-a5e7-e6e92d5d055c] succeeded in 0.36114292799902614s: None
+[2020-02-07 16:53:22,411: INFO/MainProcess] Received task: send_push_notification[73a31c2f-19ee-46c7-992c-ca0b7bb538c6]  
+[2020-02-07 16:53:22,659: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 16:53:22,660: INFO/ForkPoolWorker-1] Task send_push_notification[73a31c2f-19ee-46c7-992c-ca0b7bb538c6] succeeded in 0.24826969599234872s: None
+[2020-02-07 17:04:24,742: INFO/MainProcess] Received task: send_push_notification[51e66c00-427b-4de4-88a1-4b8fdc2edd70]  
+[2020-02-07 17:04:25,166: WARNING/ForkPoolWorker-1] Notification has sent to the user
+[2020-02-07 17:04:25,167: INFO/ForkPoolWorker-1] Task send_push_notification[51e66c00-427b-4de4-88a1-4b8fdc2edd70] succeeded in 0.4239381289953599s: None
+[2020-02-08 23:52:34,254: INFO/MainProcess] Received task: send_email_for_user[fab4f7f3-79bf-48cc-b1b2-eb74e96ac20b]  
+[2020-02-08 23:52:34,558: INFO/ForkPoolWorker-1] Task send_email_for_user[fab4f7f3-79bf-48cc-b1b2-eb74e96ac20b] succeeded in 0.30302133597433567s: None
+[2020-02-09 05:25:23,784: INFO/MainProcess] Received task: send_email_for_user[6628e252-47c0-458d-be93-d21421e249c1]  
+[2020-02-09 05:25:24,450: INFO/ForkPoolWorker-1] Task send_email_for_user[6628e252-47c0-458d-be93-d21421e249c1] succeeded in 0.6650644640030805s: None
+[2020-02-09 05:26:05,373: INFO/MainProcess] Received task: send_email_for_user[3cc29c21-bc1e-406f-9d5e-3b32b1843a34]  
+[2020-02-09 05:26:06,129: INFO/ForkPoolWorker-1] Task send_email_for_user[3cc29c21-bc1e-406f-9d5e-3b32b1843a34] succeeded in 0.7550289729842916s: None
+[2020-02-10 16:53:56,363: INFO/MainProcess] Received task: send_email_for_user[cafd8baa-66c7-491f-952d-da242b1a32f0]  
+[2020-02-10 16:53:56,927: INFO/ForkPoolWorker-1] Task send_email_for_user[cafd8baa-66c7-491f-952d-da242b1a32f0] succeeded in 0.5641025049844757s: None
+[2020-02-11 07:04:30,483: INFO/MainProcess] Received task: send_email_for_user[ab72efce-bdba-4d13-9e7e-0acc7317c61c]  
+[2020-02-11 07:04:31,268: INFO/ForkPoolWorker-1] Task send_email_for_user[ab72efce-bdba-4d13-9e7e-0acc7317c61c] succeeded in 0.7836897579836659s: None
+[2020-02-11 07:05:13,829: INFO/MainProcess] Received task: send_email_for_user[87756841-43be-4075-b9a1-144113770d96]  
+[2020-02-11 07:05:14,133: INFO/ForkPoolWorker-1] Task send_email_for_user[87756841-43be-4075-b9a1-144113770d96] succeeded in 0.30303594400174916s: None
+[2020-02-11 10:08:58,678: INFO/MainProcess] Received task: send_email_for_user[0591cbbd-a89c-48a4-ad46-b85475c3d178]  
+[2020-02-11 10:08:59,526: INFO/ForkPoolWorker-1] Task send_email_for_user[0591cbbd-a89c-48a4-ad46-b85475c3d178] succeeded in 0.8469844490173273s: None
+[2020-02-11 10:11:37,088: INFO/MainProcess] Received task: send_email_for_user[f074eacf-1af1-496c-b06d-327977c0bb7e]  
+[2020-02-11 10:11:37,586: INFO/ForkPoolWorker-1] Task send_email_for_user[f074eacf-1af1-496c-b06d-327977c0bb7e] succeeded in 0.49668232700787485s: None
+[2020-02-11 12:55:19,550: INFO/MainProcess] Received task: send_email_for_user[52636fea-3bd0-479d-9caa-3b29e476efc5]  
+[2020-02-11 12:55:20,316: INFO/ForkPoolWorker-1] Task send_email_for_user[52636fea-3bd0-479d-9caa-3b29e476efc5] succeeded in 0.7649052050546743s: None
+[2020-02-11 12:58:25,101: INFO/MainProcess] Received task: send_email_for_user[2c4d90c2-790c-495a-a69f-dec32d6fa010]  
+[2020-02-11 12:58:25,647: INFO/ForkPoolWorker-1] Task send_email_for_user[2c4d90c2-790c-495a-a69f-dec32d6fa010] succeeded in 0.5446650790399872s: None
+[2020-02-11 13:00:58,242: INFO/MainProcess] Received task: send_email_for_user[9dab9223-5736-4e0a-aa61-bbaedcf125f7]  
+[2020-02-11 13:00:58,567: INFO/ForkPoolWorker-1] Task send_email_for_user[9dab9223-5736-4e0a-aa61-bbaedcf125f7] succeeded in 0.3235224319505505s: None
+[2020-02-11 14:28:25,282: INFO/MainProcess] Received task: send_email_for_user[bef7ea1c-c94b-45bc-9940-b102df23aabe]  
+[2020-02-11 14:28:26,156: INFO/ForkPoolWorker-1] Task send_email_for_user[bef7ea1c-c94b-45bc-9940-b102df23aabe] succeeded in 0.8734957429696806s: None
+[2020-02-11 15:21:41,628: INFO/MainProcess] Received task: send_email_for_user[9b825350-f7a7-4ae9-9466-c83163c7961f]  
+[2020-02-11 15:21:42,365: INFO/ForkPoolWorker-1] Task send_email_for_user[9b825350-f7a7-4ae9-9466-c83163c7961f] succeeded in 0.7367912370245904s: None

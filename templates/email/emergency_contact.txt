@@ -1,0 +1,15 @@
+{{contact_type}} Contact Added
+Dear {{ name }}
+Welcome to Samscloud
+
+This is to inform you that, your Contact has been added to{{ first_name }}'s contact list.
+
+<p>Please click the button to confirm the request</p>
+
+{{ activate_url }}&status=Accepted
+
+{{ activate_url }}&status=Rejected
+
+Thank You,
+
+SamsCloud Support

@@ -1,0 +1,7 @@
+Incident Ended
+
+Dear {{ user_name }},
+
+{{ incident_user }} reported incident has been end because of {{ reason }}
+Thank You,
+SamsCloud Support

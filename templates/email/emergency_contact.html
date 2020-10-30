@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> {{contact_type}} Contact Added </title>
+</head>
+<body>
+<p> Dear {{ name }},</p>
+<p>Welcome to Samscloud</p>
+
+<p>This is to inform you that, your contact has been added to {{ first_name }}'s {{contact_type}} contact list.</p>
+
+<p>Please click the button to confirm the request</p>
+
+  <table>
+      <tr>
+          <td style="border-radius: 2px; background-color: #2987ed">
+              <a href="{{ activate_url }}&status=Accepted" target="_blank" style="padding: 8px 12px; border: 1px solid #2987ed;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;margin:5px;">
+                  Accept
+              </a>
+          </td>
+          <td>
+
+          </td>
+           <td style="border-radius: 2px;background-color: #ED2939">
+              <a href="{{ activate_url }}&status=Rejected" target="_blank" style="padding: 8px 12px; border: 1px solid #ED2939;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;margin:5px;">
+                  Reject
+              </a>
+          </td>
+      </tr>
+  </table>
+
+<p>Thank You,</p>
+<p> SamsCloud Support</p>
+</body>
+</html>

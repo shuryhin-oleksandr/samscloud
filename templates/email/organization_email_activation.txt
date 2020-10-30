@@ -1,0 +1,17 @@
+Email Activation
+
+Dear {{ user.first_name }},
+Welcome to Samscloud
+
+We've generated a URL to activate you organization email. If you did not request to activate or If you've changed your
+    mind simply, ignore this mail and nothing will happen
+
+Your can activate the mail by clicking the following URL
+
+{{ activate_url }}
+
+if clicking the above URL does not work, copy and paste the URL into a browser window. The URL will expire in 2 hours
+
+Thank You,
+
+SamsCloud Support
