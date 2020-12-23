@@ -742,7 +742,7 @@ class CurrentLocationAPIView(RetrieveUpdateAPIView):
                 serializer.update(snippet,validated_data=serializer.data)
                 return Response(serializer.data, status=HTTP_200_OK)
         except Exception as e:
-            print e
+            return Response(e, status=HTTP_200_OK)
 
 
 class ShareLocationAPIView(RetrieveUpdateAPIView):
