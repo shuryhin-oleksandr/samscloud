@@ -735,12 +735,14 @@ class CurrentLocationAPIView(RetrieveUpdateAPIView):
         return CurrentUserLocation.objects.get(user=self.request.user)
 
     def put(self,request):
-        snippet = CurrentUserLocation.objects.get(user=self.request.user)
-        serializer = UserCurrentLocationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.update(snippet,validated_data=serializer.data)
-            return Response(serializer.data, status=HTTP_200_OK)
-
+        try:
+            snippet = CurrentUserLocation.objects.get(user=self.request.user)
+            serializer = UserCurrentLocationSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.update(snippet,validated_data=serializer.data)
+                return Response(serializer.data, status=HTTP_200_OK)
+        except Exception as e:
+            print e
 
 
 class ShareLocationAPIView(RetrieveUpdateAPIView):
