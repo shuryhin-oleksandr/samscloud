@@ -724,7 +724,7 @@ class UserNotificationUpdateAPIView(RetrieveUpdateAPIView):
     def get_object(self):
         return NotificationSettings.objects.get(user=self.request.user)
 
-class CurrentLocationAPIView(RetrieveUpdateAPIView):
+class CurrentLocationUpdateAPIView(RetrieveUpdateAPIView):
     """
     View to retrieve patch update user current location
     """
@@ -742,7 +742,23 @@ class CurrentLocationAPIView(RetrieveUpdateAPIView):
                 serializer.update(snippet,validated_data=serializer.data)
                 return Response(serializer.data, status=HTTP_200_OK)
         except Exception as e:
-            return Response(e, status=HTTP_200_OK)
+            return Response(str(e), status=HTTP_404_NOT_FOUND)
+
+
+class CurrentLocationAddAPIView(RetrieveUpdateAPIView):
+    """
+    API to post user current location
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserCurrentLocationSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = UserCurrentLocationSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            new_data = serializer.data
+            return Response(new_data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)         
 
 
 class ShareLocationAPIView(RetrieveUpdateAPIView):
