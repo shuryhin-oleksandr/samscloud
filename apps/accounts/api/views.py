@@ -55,7 +55,7 @@ from apps.accounts.api.serializers import (UserCreateSerializer,
                                            EmergencyContactDetailsSerializer,
                                            UsersListSerializer,
                                            EmergencyContactRequestCheckinSerializer,
-                                           ContactLocationUpdateerializer, UserProfileSerializer, UserDetailsSerializer,
+                                           ContactLocationUpdateSerializer, UserProfileSerializer, UserDetailsSerializer,
                                            UserNotificationSerializer, UserCurrentLocationSerializer,
                                            ShareLocationSerializer, UserSettingsSerializer,
                                            NotificationHistorySerializer)
@@ -745,7 +745,7 @@ class CurrentLocationUpdateAPIView(RetrieveUpdateAPIView):
             return Response(str(e), status=HTTP_404_NOT_FOUND)
 
 
-class CurrentLocationAddAPIView(RetrieveUpdateAPIView):
+class CurrentLocationCreateAPIView(CreateAPIView):
     """
     API to post user current location
     """
@@ -758,7 +758,7 @@ class CurrentLocationAddAPIView(RetrieveUpdateAPIView):
         if serializer.is_valid(raise_exception=True):
             new_data = serializer.data
             return Response(new_data, status=HTTP_200_OK)
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)         
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class ShareLocationAPIView(RetrieveUpdateAPIView):
