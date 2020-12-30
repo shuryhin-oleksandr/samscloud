@@ -753,11 +753,10 @@ class CurrentLocationCreateAPIView(CreateAPIView):
     serializer_class = UserCurrentLocationSerializer
 
     def post(self, request, *args, **kwargs):
-        data = request.data
-        serializer = UserCurrentLocationSerializer(data=data)
+        serializer = UserCurrentLocationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            new_data = serializer.data
-            return Response(new_data, status=HTTP_200_OK)
+            serializer.save(user=self.request.user.id)
+            return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
