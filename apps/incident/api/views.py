@@ -141,7 +141,7 @@ class IncidentListCreateAPIView(ListCreateAPIView):
         return Incident.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, is_started=True)
 
 
 class IncidentRetrieveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
