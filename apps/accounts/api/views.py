@@ -55,7 +55,7 @@ from apps.accounts.api.serializers import (UserCreateSerializer,
                                            EmergencyContactDetailsSerializer,
                                            UsersListSerializer,
                                            EmergencyContactRequestCheckinSerializer,
-                                           ContactLocationUpdateSerializer, UserProfileSerializer, UserDetailsSerializer,
+                                           ContactLocationUpdateerializer, UserProfileSerializer, UserDetailsSerializer,
                                            UserNotificationSerializer, UserCurrentLocationSerializer,
                                            ShareLocationSerializer, UserSettingsSerializer,
                                            NotificationHistorySerializer)
