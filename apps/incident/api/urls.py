@@ -21,11 +21,14 @@ from .views import (
     IncidentHistoryListAPIView,
     OngoingIncidentListAPIView,
     IncidentContactsShareAPIView,
-    IncidentOrganizationShareAPIView
+    IncidentOrganizationShareAPIView,
+    EmergencyContactIncidentsListAPIView
 )
 
 urlpatterns = [
     path('list-create/', IncidentListCreateAPIView.as_view(), name='create-list-incident'),
+    path('emergency-contact-incidents-list/', EmergencyContactIncidentsListAPIView.as_view(),
+         name='emergency-contact-incidents-list'),
     path('<int:pk>/incident/', IncidentRetrieveUpdateDeleteAPIView.as_view(), name='incident-update-retrieve-delete'),
     path('incident-location/', IncidentLocationAPIView.as_view(), name='incident-location'),
     path('emergency-quick-contact/', EmergencyQuickContactAddAPIView.as_view(), name='emergency-quick-contact'),

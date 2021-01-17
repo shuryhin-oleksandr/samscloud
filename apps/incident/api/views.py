@@ -144,6 +144,23 @@ class IncidentListCreateAPIView(ListCreateAPIView):
         serializer.save(user=self.request.user, is_started=True)
 
 
+class EmergencyContactIncidentsListAPIView(ListAPIView):
+    """
+       API list incidents for emergency contact users
+    """
+    serializer_class = IncidentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        emergency_contacts_qs = EmergencyContact.objects.filter(
+            Q(email=self.request.user.email) | Q(phone_number=self.request.user.phone_number))
+        users = []
+        if emergency_contacts_qs:
+            for emergency_contact in emergency_contacts_qs:
+                users.append(emergency_contact.user.id)
+            return Incident.objects.filter(user__in=users)
+
+
 class IncidentRetrieveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     """
     Incident API to Retrieve/Update/Delete
