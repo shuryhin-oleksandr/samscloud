@@ -158,7 +158,7 @@ class EmergencyContactIncidentsListAPIView(ListAPIView):
         if emergency_contacts_qs:
             for emergency_contact in emergency_contacts_qs:
                 users.append(emergency_contact.user.id)
-            return Incident.objects.filter(user__in=users)
+            return Incident.objects.filter(user__in=users, is_started=True)
 
 
 class IncidentRetrieveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
