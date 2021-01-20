@@ -43,7 +43,7 @@ def create_pro_code(sender, instance, **kwargs):
         data = {"roomId": room_id}
         url = 'https://antmedia.samscloud.io:5443/LiveApp/rest/v2/broadcasts/conference-rooms'
         headers = {'content-type': 'application/json'}
-        response = requests.post(url=url, data=json.dumps(data), headers=headers)
+        response = requests.post(url=url, data=json.dumps(data), verify=False, headers=headers)
         if response.status_code == 200:
             response_data = json.loads(response.text)
             room_id = response_data['roomId']
