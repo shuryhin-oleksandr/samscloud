@@ -20,7 +20,6 @@ from apps.organization.models import OrganizationContact
 def send_user_notification(incident_id, org_obj):
     data = {}
     try:
-
         obj = Incident.objects.get(id=incident_id)
         data["uuid"] = str(org_obj.uuid)
         data["latitude"] = obj.latitude
@@ -35,13 +34,16 @@ def send_user_notification(incident_id, org_obj):
     return str(data)
 
 def save_incident_duration(incident_id, vod_id):
-    vod_url = 'https://antmedia.samscloud.io:5443/WebRTCAppEE/rest/v2/vods/' + vod_id
+    vod_url = None
+    if vod_id is not None:
+        vod_url = 'https://antmedia.samscloud.io:5443/WebRTCAppEE/rest/v2/vods/' + vod_id
     try:
-        vod_response = requests.get(vod_url)
-        if vod_response.status_code == 200:
-            response = json.loads(vod_response.content)
-            stream_duration = response['duration']
-            save_incident_duration_to_model(incident_id, stream_duration)
+        if vod_url is not None:
+            vod_response = requests.get(vod_url)
+            if vod_response.status_code == 200:
+                response = json.loads(vod_response.content)
+                stream_duration = response['duration']
+                save_incident_duration_to_model(incident_id, stream_duration)
     except Exception as e:
         print("Unable to save the incident duration due to ", e)
 
