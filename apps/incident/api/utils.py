@@ -39,7 +39,7 @@ def save_incident_duration(incident_id, vod_id):
         vod_url = 'https://antmedia.samscloud.io:5443/WebRTCAppEE/rest/v2/vods/' + vod_id
     try:
         if vod_url is not None:
-            vod_response = requests.get(vod_url)
+            vod_response = requests.get(vod_url, verify=False)
             if vod_response.status_code == 200:
                 response = json.loads(vod_response.content)
                 stream_duration = response['duration']
