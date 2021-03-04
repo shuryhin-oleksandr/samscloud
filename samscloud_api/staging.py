@@ -35,14 +35,11 @@ MEDIA_URL = '/media/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_USE_TLS = True
+EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'qacalling@gmail.com'
-#EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = 'samscloud.IO@123'
-#EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_USER = 'AKIAQDHHFW26MJEYB4G3'
+EMAIL_HOST_PASSWORD = 'BBPPY5AnBmVHbY4V6Pynzm7VfT8jIjICC1TP96vKy4ex'
+EMAIL_USE_TLS = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
