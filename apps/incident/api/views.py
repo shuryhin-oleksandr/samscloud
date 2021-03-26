@@ -268,7 +268,7 @@ class IncidentRespondersAlertAPIView(CreateAPIView):
             pass
         incident_obj = Incident.objects.get(id=request.data.get("incident_id"))
         emergency_contacts_qs = EmergencyContact.objects.filter(user=user_obj, status="Accepted",
-                                                               contact_type='Emergency')
+                                                                contact_type='Emergency')
         if emergency_contacts_qs.exists():
             emergency_contacts_exists = True
             for contact in emergency_contacts_qs:
@@ -293,7 +293,7 @@ class IncidentRespondersAlertAPIView(CreateAPIView):
                 if user_bj:
                     setting = NotificationSettings.objects.filter(user=user_bj).first()
                     if qs.exists():
-                        if setting.crisis_emergency_alert == True and setting.contact_has_incident == True:
+                        if setting.crisis_emergency_alert is True and setting.contact_has_incident is True:
                             fcm_obj = qs.first()
                             data = IncidentHistorySerializer(incident_obj, context={'request': request}).data
                             user_data = dict(data['user'])
@@ -361,7 +361,7 @@ class IncidentRespondersAlertAPIView(CreateAPIView):
                                     data = IncidentHistorySerializer(incident_obj, context={'request': request}).data
                                     user_data = dict(data['user'])
                                     data['user'] = user_data
-                                    message = "%s has been reporting an incident" % (user_obj.first_name)
+                                    message = "%s is reporting an incident" % (user_obj.first_name)
                                     title = "Incident Reporting"
                                     data['contact_uuid'] = str(data['contact_uuid'])
                                     history_data = IncidentHistorySerializer(incident_obj, context={'request': request}).data

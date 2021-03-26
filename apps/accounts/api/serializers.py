@@ -34,9 +34,9 @@ from rest_framework.serializers import (
     ImageField,
 )
 from fcm_django.models import FCMDevice
-from apps.organization.models import OrganizationProfile, EmergencyContact
+from apps.organization.models import OrganizationProfile, EmergencyContact, UserOrganization
 from ...incident.models import Incident
-from ...reports.models import NotificationSettings, CurrentUserLocation, NotificationHistory
+from ...reports.models import NotificationSettings, CurrentUserLocation, NotificationHistory, Report
 
 User = get_user_model()
 
@@ -713,7 +713,7 @@ class EmergencyContactAddSerializer(ModelSerializer):
                     Q(email=emergency_contact_obj.email) | Q(
                         phone_number=emergency_contact_obj.phone_number)).first()
                 setting = NotificationSettings.objects.get(user=user_bj)
-                if setting.contact_request == True:
+                if setting and setting.contact_request is True:
                     fcm_obj = qs.first()
                     data = {
                         "type": "accept_contact",
@@ -878,9 +878,19 @@ class UserDetailsSerializer(ModelSerializer):
     def to_representation(self, instance):
         data = super(UserDetailsSerializer, self).to_representation(instance)
         user = User.objects.get(id=instance.id)
-        data.update({"Emergency-contact-count": EmergencyContact.objects.filter(user=user, contact_type="Emergency", status="Accepted").count(), "Family-contact-count": EmergencyContact.objects.filter(user=user, contact_type="Family", status="Accepted").count(),
-                     "ongoing-incident-count": Incident.objects.filter(user=user, is_ended=False, is_stopped=False, is_started=True).count(), "history-incident-count": Incident.objects.filter(Q(user=user, is_ended=True) | Q(user=user, is_stopped=True)).count()})
+        data.update({"Emergency-contact-count": EmergencyContact.objects.filter(user=user, contact_type="Emergency",
+                                                                                status="Accepted").count(),
+                     "Family-contact-count": EmergencyContact.objects.filter(user=user, contact_type="Family",
+                                                                             status="Accepted").count(),
+                     "ongoing-incident-count": Incident.objects.filter(user=user, is_ended=False, is_stopped=False,
+                                                                       is_started=True).count(),
+                     "history-incident-count": Incident.objects.filter(
+                         Q(user=user, is_ended=True) | Q(user=user, is_stopped=True)).count(),
+                     "organizations-count": UserOrganization.objects.filter(user=user).count(),
+                     "report-count": Report.objects.filter(user=user).count(),
+                     "notification-history-count": NotificationHistory.objects.filter(user=user).count()})
         return data
+
 
 class UserNotificationSerializer(ModelSerializer):
     """
