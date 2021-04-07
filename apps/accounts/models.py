@@ -1,9 +1,12 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.dispatch import receiver
 from django.conf import settings
+from django.core.validators import MinValueValidator
 
 from django_rest_passwordreset.signals import reset_password_token_created
 
@@ -50,6 +53,26 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    RACIAL_TYPE = (
+        ('Asian', 'Asian'),
+        ('Black', 'Black'),
+        ('Colored', 'Colored'),
+        ('Indian', 'Indian'),
+        ('Mixed', 'Mixed'),
+        ('White', 'White'),
+        ('American Indian', 'American Indian'),
+        ('Alaska Native', 'Alaska Native'),
+        ('Black or African American', 'Black or African American'),
+        ('Native Hawaiian or Other Pacific Islander', 'Native Hawaiian or Other Pacific Islander'),
+        ('Hispanic or Latino', 'Hispanic or Latino'),
+        ('White', 'White'),
+    )
+    Gender_TYPE = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    )
+
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -88,6 +111,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     battery_power = models.CharField(max_length=10, null=True, blank=True)
     subscription_count = models.CharField(max_length=10, null=True, blank=True)
     is_subscribed = models.BooleanField(default=False)
+    date_of_birth = models.DateField(blank=True, null=True)
+    racial_group = models.CharField(max_length=50, choices=RACIAL_TYPE, default='Asian', blank=True, null=True)
+    gender = models.CharField(max_length=50, choices=Gender_TYPE, default='Male', blank=True, null=True)
+    risk_level = models.BooleanField(default=False)
+    contact_exposure = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal('0.00'), validators=[MinValueValidator(Decimal('0.00'))])
+    location_exposure = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal('0.00'), validators=[MinValueValidator(Decimal('0.00'))])
+    flight_exposure = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal('0.00'), validators=[MinValueValidator(Decimal('0.00'))])
+    last_login = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

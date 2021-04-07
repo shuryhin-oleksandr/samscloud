@@ -1,0 +1,1 @@
+default_app_config = 'apps.covid19.covid_accounts.apps.CovidReportsConfig'
