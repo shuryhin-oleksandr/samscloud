@@ -41,3 +41,18 @@ class UserContacts(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserContactTagging(models.Model):
+    user_contact = models.ForeignKey(UserContacts, on_delete=models.CASCADE, related_name="user_contact_tagging")
+    from_time = models.TimeField()
+    to_time = models.TimeField()
+    latitude = models.CharField(max_length=60, null=True, blank=True)
+    longitude = models.CharField(max_length=60, blank=True, null=True)
+    is_infected = models.BooleanField(default=False)
+    date_created = models.DateField(auto_now_add=True)
+    place_tag = models.CharField(max_length=100, blank=True, null=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.to_time

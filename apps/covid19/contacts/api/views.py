@@ -12,8 +12,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.accounts.models import User
 from apps.covid19.covid_accounts.models import UserReport, Lastupdated
-from apps.covid19.contacts.models import UserContacts, Disease, Symptoms
-from apps.covid19.contacts.api.serializers import UserContactSerializer, DiseaseSerializer, SymptomsSerializer
+from apps.covid19.contacts.models import UserContacts, Disease, Symptoms, UserContactTagging
+from apps.covid19.contacts.api.serializers import UserContactSerializer, DiseaseSerializer, SymptomsSerializer, \
+    UserContactTaggingSerializer
 
 
 class ContactCreateAPIView(ListCreateAPIView):
@@ -43,6 +44,39 @@ class ContactCreateAPIView(ListCreateAPIView):
             serializer = UserContactSerializer(data=request.data["data"],
                                                context={'request': request, 'report': report},
                                                many=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class ContactTaggingCreateAPIView(ListCreateAPIView):
+    """
+    User Contact Tagging Create APIView
+    """
+    serializer_class = UserContactTaggingSerializer
+    queryset = UserContactTagging.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return UserContactTagging.objects.filter(user=user)
+
+    def create(self, request, *args, **kwargs):
+        report = UserReport.objects.filter(user=self.request.user).last()
+        user = self.request.user
+        user.last_updated = timezone.now()
+        user.save()
+        last_updated = Lastupdated(updated_time=timezone.now())
+        last_updated.save()
+        if 'data' not in self.request.data:
+            serializer = UserContactTaggingSerializer(data=request.data, context={'request': request, 'report': report})
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+        else:
+            serializer = UserContactTaggingSerializer(data=request.data["data"],
+                                                      context={'request': request, 'report': report},
+                                                      many=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
         headers = self.get_success_headers(serializer.data)
