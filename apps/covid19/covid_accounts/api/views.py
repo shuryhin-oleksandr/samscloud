@@ -1,4 +1,5 @@
 import re
+import datetime
 from random import randint
 
 from django.shortcuts import render
@@ -362,13 +363,22 @@ class UserTestingCreateAPIView(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         user = self.request.user
+        last_testing = UserTesting.objects.filter(user=self.request.user).last()
+        data = request.data
         user.last_updated = timezone.now()
         user.is_tested = True
+        test_result = data.get('test_result')
+        tested_date = datetime.datetime.strptime(data.get('tested_date'), "%Y-%m-%d").date()
+        if last_testing is None and test_result == 'Positive':
+            user.risk_level = True
+        elif last_testing is not None and last_testing.tested_date < tested_date and test_result == 'Positive':
+            user.risk_level = True
+        else:
+            user.risk_level = False
         user.save()
         last_updated = Lastupdated(updated_time=timezone.now())
         last_updated.save()
         report = UserReport.objects.filter(user=self.request.user).last()
-        last_testing = UserTesting.objects.filter(user=self.request.user).last()
         if last_testing is not None:
             testing_number = re.search(r'\d+', last_testing.name)
             if testing_number is not None:
