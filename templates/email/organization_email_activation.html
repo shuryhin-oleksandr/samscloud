@@ -1,19 +1,372 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title> Email Activation </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Email Activation</title>
+    <style>
+        /* A simple css reset */
+        body, table, thead, tbody, tr, td, img {
+            padding: 0;
+            margin: 0;
+            border: none;
+            border-spacing: 0;
+            border-collapse: collapse;
+            vertical-align: top;
+        }
+
+        table.content a {
+            text-decoration: none;
+            color: #0156ff !important;
+        }
+
+        .bg-dark {
+            background: #3e3f42;
+        }
+
+        /* Add some padding for small screens */
+        .wrapper {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        table.content {
+            margin: 15px 0 23px;
+            border-radius: 6px;
+            padding: 20px;
+            background-color: #e7e6e6;
+            letter-spacing: 0.39px;
+            line-height: 16px;
+        }
+
+        .tr-spacing {
+            height: 15px;
+        }
+
+        h1, h2, h3, h4, h5, h6, p {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 15px;
+            line-height: 1.6;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+
+        p, a, li {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-size: 14px;
+            line-height: 16px;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        .d-block {
+            display: block;
+        }
+
+        .fs-12 {
+            font-size: 12px;
+        }
+
+        .mt-2 {
+            margin-top: 20px;
+        }
+
+        .mt-25 {
+            margin-top: 25px;
+        }
+
+        .align-middle {
+            vertical-align: middle;
+        }
+
+        .header, .footer {
+            width: 100%;
+            height: 68px;
+            box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.4);
+            background-color: #1c1d1e;
+        }
+
+        .header-text {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .footer-text {
+            margin-top: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.33;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .personal-security {
+            margin-top: 10px;
+            margin-bottom: 25px;
+            font-size: 12px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.33;
+            letter-spacing: 1px;
+            color: #f1f1f1;
+        }
+
+        .support-block {
+            line-height: 1.33;
+            letter-spacing: 0.5px;
+            color: #080707;
+        }
+
+        .privacy-policy {
+            letter-spacing: 0.2px;
+        }
+
+        @media only screen and (max-width: 620px) {
+
+            .wrapper .section {
+                width: 100%;
+            }
+
+            .wrapper .column {
+                width: 100%;
+                display: block;
+            }
+
+            .mobile-logo {
+                margin-left: 5px;
+                margin-bottom: 15px;
+            }
+
+            .header, .footer {
+                height: 38px;
+            }
+        }
+    </style>
 </head>
+
+{% load static %}
+
 <body>
-<p> Dear {{ name }},</p>
-<p>Welcome to Samscloud</p>
+<table class="bg-dark" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            <table class="section header" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="column" width="600">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td align="left">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="wrapper" width="600" align="center">
+            <!-- Header image -->
+            <table class="section mt-25" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="column" width="350">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td align="left">
+                                    <a href="#"><img class="mobile-logo" src="{% static 'emails/img/logo-copy.png' %}"
+                                                     alt="Samscloud" width="600"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="column" width="250">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td align="left" width="86">
+                                    <a href="#"><img src="{% static 'emails/img/apple.png' %}" alt="AppStore"
+                                                     width="600"/></a>
+                                </td>
+                                <td width="15"> &nbsp;</td>
+                                <td align="left" width="152">
+                                    <a href="#" style="color: #fff;" class="header-text align-middle">Download for
+                                        iPhone</a>
+                                </td>
+                            </tr>
+                            <tr class="tr-spacing"></tr>
+                            <tr>
+                                <td align="left" width="86">
+                                    <a href="#"><img src="{% static 'emails/img/google-play.png' %}" alt="GooglePlay"
+                                                     width="600"/></a>
+                                </td>
+                                <td width="15"> &nbsp;</td>
+                                <td align="left" width="152">
+                                    <a style="color: #fff;" class="header-text align-middle" href="#">Download for
+                                        Android</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
 
-<p>We've generated a URL to activate you organization email. If you did not request to activate or If you've changed your
-    mind simply, ignore this mail and nothing will happen</p>
+            <table class="section content" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="20" valign="top">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td> &nbsp;</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td width="560" valign="top">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td align="left">
+                                    <h3 class="mt-2">Dear {{ name }},</h3>
+                                    <p style="text-align:justify;">Welcome to Samscloud</p>
+                                    <p style="text-align:justify;">We've generated a URL to activate your organization email. If you
+                                        did not request to activate your mail or if you've changed your mind, simply
+                                        ignore this email and nothing will happen.</p>
+                                    <p style="text-align:justify;">You can activate the mail by clicking the following
+                                        URL:
+                                        <a class="d-block" href="{{ activate_url }}"> Activate your organization email </a>
+                                    </p>
+                                    <p style="text-align:justify;">If clicking the URL above does not work, copy and
+                                        paste the URL into a browser window. The URL will expire in 2 hours.</p>
+                                    <p></p>
+                                    <p style="text-align:justify;">Thank you,</p>
+                                    <p style="text-align:justify;">Samscloud Support</p>
+                                    <h5>Have Questions?</h5>
+                                    <p class="fs-12 support-block" style="text-align:justify;">If you have questions or
+                                        need support,
+                                        please contact
+                                        us at <a href="mailto:support@samscloud.io"
+                                                 class="fs-12">support@samscloud.io</a>.</p>
+                                    <p></p>
+                                    <p class="fs-12 privacy-policy">Read our <a href="#" class="fs-12">privacy
+                                        policy</a> and learn
+                                        more at
+                                        <a href="samscloud.io" class="fs-12">samscloud.io</a>.</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td width="20" valign="top">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td> &nbsp;</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
 
-<p>Your can activate the mail by clicking the following URL</p>
-<p><a href="{{ activate_url }}"> Activate your organization email </a></p>
-<p>if clicking the above URL does not work, copy and paste the URL into a browser window. The URL will expire in 2 hours</p>
-<p>Thank You,</p>
-<p> SamsCloud Support</p>
+            <table class="section" cellpadding="0" cellspacing="0" width="600">
+                <tr>
+                    <td class="column" valign="top">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td width="20" valign="top">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td> &nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td align="left">
+                                    <p class="personal-security" style="text-align:justify;">Samscloud Personal Security
+                                        Solution Instantly
+                                        Streams Real-Time Audio and Video, and GPS Location Tracking, to Added Contacts
+                                        and Organizations in Emergency Situations. Learn more at Samscloud.io</p>
+                                </td>
+                                <td width="20" valign="top">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td> &nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="section footer" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="column" width="600" align="center">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td class="column" width="20" valign="top">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td> &nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td align="center" width="560">
+                                    <p class="footer-text" style="text-align:justify;">This message was sent by
+                                        Samscloud LLC, Address. Samscloud
+                                        and the Samscloud logo
+                                        are registered trademarks of Samscloud inc.</p>
+                                </td>
+                                <td class="column" width="20" valign="top">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td> &nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
