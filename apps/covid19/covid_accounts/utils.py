@@ -17,6 +17,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 import dateutil.parser
 import subprocess
 
+from apps.accounts.api.utils import send_email_for_user
 from apps.covid19.flight.models import Flight
 from apps.covid19.location.models import GlobalLocations, AssistanceLocations
 from apps.covid19.covid_accounts.models import UserReport
@@ -126,24 +127,6 @@ def send_twilio_sms(message, to):
         print("Unable to send message because of", e)
 
 
-@task(name="send_email_for_user")
-def send_email_for_user(context, template_name, subject, recipient):
-    """
-    SMTP mail sending function view
-    :param context:
-    :param template_name:
-    :param subject:
-    :param recipient:
-    :return:
-    """
-    email_html_message = render_to_string('%s.html' % template_name, context)
-    email_plaintext_message = render_to_string('%s.txt' % template_name, context)
-    from_email = settings.DEFAULT_FROM_EMAIL
-    msg = EmailMultiAlternatives(subject, email_plaintext_message, from_email, [recipient])
-    msg.attach_alternative(email_html_message, "text/html")
-    msg.send()
-
-
 @periodic_task(run_every=crontab(minute='*/2'))
 def get_global_covid_data():
     date = datetime.date.today()
@@ -151,7 +134,7 @@ def get_global_covid_data():
 
     try:
         URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/%s-%s-%s.csv" % (
-        previous.strftime('%m'), previous.strftime('%d'), previous.strftime('%Y'))
+            previous.strftime('%m'), previous.strftime('%d'), previous.strftime('%Y'))
         r = requests.get(url=URL)
         data = r.text
         file = open("response.csv", "w")
