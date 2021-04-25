@@ -121,6 +121,8 @@ class UserContactTaggingSerializer(ModelSerializer):
     from_time = TimeField(required=False)
     to_time = TimeField(required=False)
     date_contacted = DateField(format="%Y-%m-%d", required=False)
+    user_contacted = IntegerField(required=False)
+    place_tag = CharField(required=False)
 
     class Meta:
         model = UserContactTagging
@@ -131,14 +133,14 @@ class UserContactTaggingSerializer(ModelSerializer):
         request = self.context.get('request')
         report = self.context.get('report')
         user = request.user
-        contact_user = User.objects.get(id=request.data['user_contacted'])
+        contact_user = User.objects.get(id=validated_data.pop('user_contacted'))
         contact_phone = getattr(contact_user, 'phone_number', None)
         contact_name = getattr(contact_user, 'first_name', None)
         from_time = validated_data.pop('from_time')
         to_time = validated_data.pop('to_time')
         latitude = validated_data.get('latitude')
         longitude = validated_data.get('longitude')
-        place_tag = validated_data.get('place_tag', None)
+        place_tag = validated_data.pop('place_tag', None)
         today_contact = UserContacts.objects.filter(phone_number=contact_phone,
                                                     user_contacted=contact_user,
                                                     user=user,
