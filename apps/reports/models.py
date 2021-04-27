@@ -69,9 +69,12 @@ class NotificationSettings(models.Model):
     crisis_emergency_alert = models.BooleanField(default=True, blank=True, null=True)
     contact_has_incident = models.BooleanField(default=True, blank=True, null=True)
     send_incident_text = models.BooleanField(default=True, blank=True, null=True)
-    send_incident_email = models.BooleanField(default=True, blank=True, null=True)
+    send_incident_email = models.BooleanField(default=False, blank=True, null=True)
     app_tips = models.BooleanField(default=True, blank=True, null=True)
     new_updates = models.BooleanField(default=True, blank=True, null=True)
+    exposed_locations = models.BooleanField(default=True, blank=True, null=True)
+    infected_contact = models.BooleanField(default=True, blank=True, null=True)
+    traced_exposure = models.BooleanField(default=True, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     """
