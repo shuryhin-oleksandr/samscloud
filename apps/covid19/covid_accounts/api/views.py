@@ -13,9 +13,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from rest_framework.views import APIView
+from django.core.exceptions import ObjectDoesNotExist
 
 from apps.accounts.models import User, MobileOtp
-from apps.covid19.covid_accounts.models import UserReport, Status, Lastupdated, UserTesting
+from apps.covid19.covid_accounts.models import UserReport, Status, Disease, Lastupdated, UserTesting
 from apps.covid19.covid_accounts.api.serializers import UserCreateSerializer, MobileOTPSerializer, UserLoginSerializer, \
     MobileNumberSerializer, UserReportSerializer, UserReportWriteSerializer, ForgotPasswordSerializer, \
     ResetPasswordSerializer, MobileResetPasswordSerializer, UserReportListSerializer, MobilesNumberSerializer, \
@@ -181,7 +182,21 @@ class UserReportStatusUpdateAPIView(RetrieveUpdateAPIView):
     serializer_class = UserReportStatusSerializer
 
     def get_object(self):
-        return UserReport.objects.get(user=self.request.user)
+        return get_object_or_404(UserReport, user=self.request.user)
+
+    def put(self, request, *args, **kwargs):
+        status = Status.objects.filter(id=self.request.data.get("status")).first()
+        disease = Disease.objects.filter(id=self.request.data.get("disease", 1)).first()
+        try:
+            user_report = UserReport.objects.get(user=self.request.user)
+            user_report.status = status
+            user_report.save()
+            serializer = UserReportStatusSerializer(user_report)
+            return Response(serializer.data)
+        except ObjectDoesNotExist:
+            user_report = UserReport.objects.create(disease=disease, status=status, user=self.request.user)
+            serializer = UserReportStatusSerializer(user_report)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ForgotPasswordAPIView(CreateAPIView):
