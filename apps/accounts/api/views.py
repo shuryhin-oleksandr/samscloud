@@ -532,6 +532,12 @@ class ContactLocationUpdateAPIView(CreateAPIView):
                 contact_obj.request_checkin_longitude = longitude
                 contact_obj.request_checkin_address = address
                 contact_obj.save()
+            if contact_obj.email is not None:
+                contact_user = User.objects.filter(email=contact_obj.email)
+            elif contact_obj.phone_number is not None:
+                contact_user = User.objects.filter(phone_number=contact_obj.phone_number)
+            if contact_user is not None and contact_user is current_usr:
+                return Response({'status': 'Success'}, status=HTTP_200_OK)
             if current_usr is not None:
                 qs = FCMDevice.objects.filter(user=contact_obj.user)
                 if qs.exists():
