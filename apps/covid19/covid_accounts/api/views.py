@@ -187,6 +187,10 @@ class UserReportStatusUpdateAPIView(RetrieveUpdateAPIView):
     def put(self, request, *args, **kwargs):
         status = Status.objects.filter(id=self.request.data.get("status")).first()
         disease = Disease.objects.filter(id=self.request.data.get("disease", 1)).first()
+        user = self.request.user
+        if status.status == 'Infected':
+            user.risk_level = True
+            user.save()
         try:
             user_report = UserReport.objects.get(user=self.request.user)
             user_report.status = status
