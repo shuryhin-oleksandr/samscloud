@@ -146,8 +146,14 @@ class UserContactTaggingSerializer(ModelSerializer):
                                                     user=user,
                                                     date_contacted=validated_data.get(
                                                         "date_contacted")).last()
+        if today_contact and contact_user.risk_level is False:
+            return UserContactTagging.objects.create(user_contact=today_contact, from_time=from_time,
+                                                     to_time=to_time, latitude=latitude,
+                                                     longitude=longitude,
+                                                     place_tag=place_tag,
+                                                     is_infected=False)
         if today_contact:
-            delta = datetime.timedelta(minutes=4)
+            delta = datetime.timedelta(minutes=8)
             start = (datetime.datetime.combine(datetime.date(9999, 1, 1),
                                                from_time) - delta).time()
 
@@ -167,7 +173,7 @@ class UserContactTaggingSerializer(ModelSerializer):
                                                                date_contacted=validated_data.get(
                                                                    "date_contacted"),
                                                                is_infected=True).last()
-                if infected_contact:
+                if infected_contact or contact_user.risk_level is True:
                     user.risk_level = True
                     user.contact_exposure += 1
                     user.save()
@@ -196,12 +202,6 @@ class UserContactTaggingSerializer(ModelSerializer):
                                                              longitude=longitude,
                                                              place_tag=place_tag,
                                                              is_infected=True)
-            return UserContactTagging.objects.create(user_contact=today_contact, from_time=from_time,
-                                                     to_time=to_time, latitude=latitude,
-                                                     longitude=longitude,
-                                                     place_tag=place_tag,
-                                                     is_infected=today_contact.is_infected)
-
         if report and report.test_result == "Positive":
             if report.data_started and report.data_started - datetime.timedelta(days=15) <= validated_data[
                 'date_contacted'] <= report.data_started + datetime.timedelta(days=15):
