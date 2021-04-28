@@ -303,6 +303,7 @@ class UserTestingUpdateSerializer(ModelSerializer):
             report.save()
         return return_data
 
+
 class UserReportSerializer(ModelSerializer):
     """
     User Report Register serializer
@@ -787,6 +788,31 @@ class UserReportWriteSerializer(serializers.Serializer):
         last_updated = Lastupdated(updated_time=timezone.now())
         last_updated.save()
         return return_data
+
+
+class UserReportStatusSerializer(Serializer):
+    """
+    User Report Status Retrieve Update Serializer
+    """
+    class Meta:
+        model = UserReport
+        fields = "__all__"
+        read_only_fields = ("id", "user")
+
+    def update(self, instance, validated_data):
+        disease_id = self.context.get('request').data.get("disease", 1)
+        status_id = self.context.get('request').data.get("status", None)
+        user = self.context.get('request').user
+        status = Status.objects.filter(id=status_id).first()
+        disease = Disease.objects.filter(id=disease_id).first()
+        user_report = UserReport.objects.filter(user=user)
+        if user_report.exists():
+            report = user_report.first()
+            report.status = status
+            report.save()
+        else:
+            user_report = UserReport.objects.create(disease=disease, status=status, user=user)
+        return user_report
 
 
 class ForgotPasswordSerializer(Serializer):

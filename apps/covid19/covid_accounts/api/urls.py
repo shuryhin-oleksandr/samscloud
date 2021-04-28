@@ -4,7 +4,7 @@ from .views import UserCreateAPIView, VerifyMobileOTPAPIView, UserLoginAPIView, 
     ResendMobileNumberOTPAPIView, UserReportCreateAPIView, UpdateReportDetails, ForgotPasswordAPIView, \
     ForgotPasswordVerifyAPIView, ResetPasswordAPIView, UserReportLocationListAPIView, SendMobileNumberOTPAPIView, \
     StatusCreateAPIView, LastUpdatedAPIView, UserTestingCreateAPIView, UpdateUserTestingDetails, \
-    UserTestingDeleteView
+    UserTestingDeleteView, UserReportStatusUpdateAPIView
 
 urlpatterns = [
     path('', UserCreateAPIView.as_view(), name='user_list_create'),
@@ -13,6 +13,7 @@ urlpatterns = [
     path('resent-otp/', ResendMobileNumberOTPAPIView.as_view(), name='resent-otp'),
     path('user-report/', UserReportCreateAPIView.as_view(), name='user_report_create'),
     path("user-report/<int:report_id>/update/", UpdateReportDetails.as_view(), name="list_update_report"),
+    path("user-report-status/", UserReportStatusUpdateAPIView.as_view(), name="user_report_status"),
     path('forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot-password'),
     path('forgot-password-verify-otp/', ForgotPasswordVerifyAPIView.as_view(),name='forgot-password-verify-otp'),
     path('forgot-password-update/', ResetPasswordAPIView.as_view(), name='forgot-password-update'),

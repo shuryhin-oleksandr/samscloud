@@ -19,7 +19,8 @@ from apps.covid19.covid_accounts.models import UserReport, Status, Lastupdated, 
 from apps.covid19.covid_accounts.api.serializers import UserCreateSerializer, MobileOTPSerializer, UserLoginSerializer, \
     MobileNumberSerializer, UserReportSerializer, UserReportWriteSerializer, ForgotPasswordSerializer, \
     ResetPasswordSerializer, MobileResetPasswordSerializer, UserReportListSerializer, MobilesNumberSerializer, \
-    StatusSerializer, UserSerializer, LastUpdatedListSerializer, UserTestingSerializer, UserTestingUpdateSerializer
+    StatusSerializer, UserSerializer, LastUpdatedListSerializer, UserTestingSerializer, UserTestingUpdateSerializer, \
+    UserReportStatusSerializer
 from apps.covid19.covid_accounts.utils import get_tokens_for_user, send_twilio_sms
 
 
@@ -170,6 +171,17 @@ class UpdateReportDetails(RetrieveUpdateAPIView):
     def get_object(self):
         report_id = self.kwargs["report_id"]
         return UserReport.objects.get(id=report_id)
+
+
+class UserReportStatusUpdateAPIView(RetrieveUpdateAPIView):
+    """
+    View to retrieve patch update user report status
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserReportStatusSerializer
+
+    def get_object(self):
+        return UserReport.objects.get(user=self.request.user)
 
 
 class ForgotPasswordAPIView(CreateAPIView):
