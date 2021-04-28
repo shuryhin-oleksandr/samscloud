@@ -727,7 +727,7 @@ class EmergencyContactAddSerializer(ModelSerializer):
                     histroy.save()
             send_emergency_contact_mail(request, emergency_contact_obj.uuid, name, email, contact_type)
         if phone_number:
-            message = "This is to inform you that, your Contact has been added to %s's  %s contact list.Please click this link to confirm the request %s" % (
+            message = "This is to inform you that your Contact has been added to %s's  %s contact list. Please click this link to confirm the request %s" % (
                 current_usr.first_name, contact_type, activate_url)
             to = phone_number
             send_twilio_sms.delay(message, to)
@@ -900,6 +900,9 @@ class UserNotificationSerializer(ModelSerializer):
     class Meta:
         model = NotificationSettings
         fields = [
+            'exposed_locations',
+            'infected_contact',
+            'traced_exposure',
             'new_message',
             'contact_request',
             'contact_disable_location',

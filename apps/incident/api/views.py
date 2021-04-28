@@ -569,7 +569,7 @@ class EndOfIncidentAPIView(CreateAPIView):
                                 if setting.crisis_emergency_alert == True and setting.contact_has_incident == True:
                                     fcm_obj = FCMDevice.objects.get(user=user_bj)
                                     title = "Incident End Reporting"
-                                    message = "%s has end the incident, %s. We recommend you check on them to ensure they’re ok." % (
+                                    message = "%s has ended the incident, %s. We recommend you check on them to ensure they’re ok." % (
                                         user_obj.first_name, request.data.get("incident_ending_message"))
                                     data = {"action":"incident_ended",
                                             "incident_id": str(incident_obj.id)}
@@ -585,7 +585,7 @@ class EndOfIncidentAPIView(CreateAPIView):
                             except ObjectDoesNotExist:
                                 pass
                             if contact_user.phone_number and contact_user.phone_number != "" and setting.send_incident_text == True:
-                                message = "%s has end the incident, %s. We recommend you check on them to ensure they’re ok." % (
+                                message = "%s has ended the incident, %s. We recommend you check on them to ensure they’re ok." % (
                                     user_obj.first_name, request.data.get("incident_ending_message"))
                                 to = contact_user.phone_number
                                 send_twilio_sms.delay(message, to)
@@ -593,7 +593,7 @@ class EndOfIncidentAPIView(CreateAPIView):
                                 send_incident_end_report(contact_user.email, contact_user.name, user_obj, reason)
                         else:
                             if contact_user.phone_number and contact_user.phone_number != "":
-                                message = "%s has end the incident, %s. We recommend you check on them to ensure they’re ok." % (
+                                message = "%s has ended the incident, %s. We recommend you check on them to ensure they’re ok." % (
                                     user_obj.first_name, request.data.get("incident_ending_message"))
                                 to = contact_user.phone_number
                                 send_twilio_sms.delay(message, to)
@@ -618,7 +618,7 @@ class EndOfIncidentAPIView(CreateAPIView):
                                     if setting.crisis_emergency_alert == True and setting.contact_has_incident == True:
                                         fcm_obj = FCMDevice.objects.get(user=user)
                                         title = "Incident Reporting"
-                                        message = "%s has end the incident, %s. We recommend you check on them to ensure they’re ok." % (
+                                        message = "%s has ended the incident, %s. We recommend you check on them to ensure they’re ok." % (
                                             user_obj.first_name, request.data.get("incident_ending_message"))
                                         data = {}
                                         incident = Incident.objects.get(id=incident_obj.id)
@@ -634,7 +634,7 @@ class EndOfIncidentAPIView(CreateAPIView):
                                 except ObjectDoesNotExist:
                                     pass
                                 if user.phone_number and user.phone_number != "" and setting.send_incident_text == True:
-                                    message = "%s has end the incident, %s. We recommend you check on them to ensure they’re ok." % (
+                                    message = "%s has ended the incident, %s. We recommend you check on them to ensure they’re ok." % (
                                         user_obj.first_name, request.data.get("incident_ending_message"))
                                     to = user.phone_number
                                     send_twilio_sms.delay(message, to)
@@ -642,7 +642,7 @@ class EndOfIncidentAPIView(CreateAPIView):
                                     send_incident_end_report(user.email, user.first_name, user_obj, reason)
                             else:
                                 if user.phone_number and user.phone_number != "":
-                                    message = "%s has end the incident, %s. We recommend you check on them to ensure they’re ok." % (
+                                    message = "%s has ended the incident, %s. We recommend you check on them to ensure they’re ok." % (
                                         user_obj.first_name, request.data.get("incident_ending_message"))
                                     to = user.phone_number
                                     send_twilio_sms.delay(message, to)
