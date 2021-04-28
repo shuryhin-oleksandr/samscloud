@@ -541,7 +541,7 @@ class ContactLocationUpdateAPIView(CreateAPIView):
                     }
                     message = "%s has %s your check-in request" % (
                     contact_obj.name, checkin_status)
-                    title = "checkIn response"
+                    title = "Check-in response"
                     histroy = NotificationHistory(user=contact_obj.user, requested_user=request.user,
                                                   notification_type="contact-location-update",
                                                   message=message,

@@ -790,7 +790,7 @@ class UserReportWriteSerializer(serializers.Serializer):
         return return_data
 
 
-class UserReportStatusSerializer(Serializer):
+class UserReportStatusSerializer(serializers.ModelSerializer):
     """
     User Report Status Retrieve Update Serializer
     """
@@ -805,11 +805,10 @@ class UserReportStatusSerializer(Serializer):
         user = self.context.get('request').user
         status = Status.objects.filter(id=status_id).first()
         disease = Disease.objects.filter(id=disease_id).first()
-        user_report = UserReport.objects.filter(user=user)
-        if user_report.exists():
-            report = user_report.first()
-            report.status = status
-            report.save()
+        user_report = UserReport.objects.get(user=user)
+        if user_report:
+            user_report.status = status
+            user_report.save()
         else:
             user_report = UserReport.objects.create(disease=disease, status=status, user=user)
         return user_report
