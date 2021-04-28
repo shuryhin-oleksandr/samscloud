@@ -196,7 +196,7 @@ class UserReportStatusUpdateAPIView(RetrieveUpdateAPIView):
         except ObjectDoesNotExist:
             user_report = UserReport.objects.create(disease=disease, status=status, user=self.request.user)
             serializer = UserReportStatusSerializer(user_report)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data)
 
 
 class ForgotPasswordAPIView(CreateAPIView):
