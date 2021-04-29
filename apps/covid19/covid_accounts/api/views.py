@@ -190,13 +190,18 @@ class UserReportStatusUpdateAPIView(RetrieveUpdateAPIView):
         user = self.request.user
         if status.status == 'Infected':
             user.risk_level = True
-            user.save()
+        else:
+            user.risk_level = False
+        user.save()
         try:
             user_report = UserReport.objects.get(user=self.request.user)
             user_report.status = status
             if status.status == 'Infected':
                 user_report.test_result = "Positive"
                 user_report.is_tested = True
+            else:
+                user_report.test_result = "Negative"
+                user_report.is_tested = False
             user_report.save()
             serializer = UserReportStatusSerializer(user_report)
             return Response(serializer.data)
