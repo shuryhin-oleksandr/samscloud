@@ -167,6 +167,12 @@ class UserContactTaggingSerializer(ModelSerializer):
                                                          longitude=longitude,
                                                          place_tag=place_tag,
                                                          is_infected=False)
+            if user.risk_level and contact_user.risk_level:
+                return UserContactTagging.objects.create(user_contact=today_contact, from_time=from_time,
+                                                         to_time=to_time, latitude=latitude,
+                                                         longitude=longitude,
+                                                         place_tag=place_tag,
+                                                         is_infected=True)
             morning_tag = UserContactTagging.objects.filter(user_contact=today_contact,
                                                             to_time__lte=start).order_by('-to_time').last()
             if morning_tag and morning_tag.is_infected is False:
@@ -224,40 +230,48 @@ class UserContactTaggingSerializer(ModelSerializer):
                                                              longitude=longitude,
                                                              place_tag=place_tag,
                                                              is_infected=True)
-        if report and report.test_result == "Positive":
-            if report.data_started and report.data_started - datetime.timedelta(days=15) <= validated_data[
-                'date_contacted'] <= report.data_started + datetime.timedelta(days=15):
-                try:
-                    if user != contact_user:
-                        contact_user.contact_exposure += 1
-                        contact_user.risk_level = True
-                        contact_user.save()
-                        qs = FCMDevice.objects.filter(user=contact_user)
-                        if qs.exists():
-                            fcm_obj = qs.first()
-                            data = {
-                                "type": "high-risk-area-user"
-                            }
-                            message = "You came in contact with a user that reported being infected with Covid-19. " \
-                                      "You may have contracted the virus and could be unknowingly spreading it. " \
-                                      "Please quarantine for at least 14 days and test to confirm your status."
-                            title = "High Risk Area"
-                            send_push_notification.delay(fcm_obj.id, title, message, data)
-                            history = NotificationHistory(user=contact_user, requested_user=contact_user,
-                                                          attribute=data,
-                                                          notification_type="high-risk-area", message=message,
-                                                          title=title)
-                            history.save()
-                except:
-                    pass
-                user_contact = UserContacts.objects.create(user=user, name=contact_name,
-                                                           phone_number=contact_phone, user_contacted=contact_user,
-                                                           is_infected=True, is_tagged=True,
-                                                           **validated_data)
-                return UserContactTagging.objects.create(user_contact=user_contact, from_time=from_time,
-                                                         to_time=to_time, latitude=latitude, is_infected=True,
-                                                         longitude=longitude,
-                                                         place_tag=place_tag)
+        if user.risk_level is True and contact_user.risk_level is True:
+            user_contact = UserContacts.objects.create(user=user, name=contact_name,
+                                                       phone_number=contact_phone, user_contacted=contact_user,
+                                                       is_infected=True, is_tagged=True,
+                                                       **validated_data)
+            return UserContactTagging.objects.create(user_contact=user_contact, from_time=from_time,
+                                                     to_time=to_time, latitude=latitude,
+                                                     longitude=longitude,
+                                                     place_tag=place_tag,
+                                                     is_infected=True)
+        if report and report.test_result == "Positive" or user.risk_level is True:
+            try:
+                if user != contact_user:
+                    contact_user.contact_exposure += 1
+                    contact_user.risk_level = True
+                    contact_user.save()
+                    qs = FCMDevice.objects.filter(user=contact_user)
+                    if qs.exists():
+                        fcm_obj = qs.first()
+                        data = {
+                            "type": "high-risk-area-user"
+                        }
+                        message = "You came in contact with a user that reported being infected with Covid-19. " \
+                                  "You may have contracted the virus and could be unknowingly spreading it. " \
+                                  "Please quarantine for at least 14 days and test to confirm your status."
+                        title = "High Risk Area"
+                        send_push_notification.delay(fcm_obj.id, title, message, data)
+                        history = NotificationHistory(user=contact_user, requested_user=contact_user,
+                                                      attribute=data,
+                                                      notification_type="high-risk-area", message=message,
+                                                      title=title)
+                        history.save()
+            except:
+                pass
+            user_contact = UserContacts.objects.create(user=user, name=contact_name,
+                                                       phone_number=contact_phone, user_contacted=contact_user,
+                                                       is_infected=True, is_tagged=True,
+                                                       **validated_data)
+            return UserContactTagging.objects.create(user_contact=user_contact, from_time=from_time,
+                                                     to_time=to_time, latitude=latitude, is_infected=True,
+                                                     longitude=longitude,
+                                                     place_tag=place_tag)
         elif contact_user.risk_level is True:
             # effect_contact = UserContacts.objects.filter(phone_number=contact_phone,
             #                                              user_contacted=contact_user,
