@@ -5,6 +5,7 @@ from rest_framework.serializers import ModelSerializer
 
 from apps.covid19.contacts.models import Symptoms, UserContacts, Disease, UserContactTagging
 from apps.reports.models import NotificationHistory
+from apps.covid19.covid_accounts.models import Status
 from django.contrib.auth import get_user_model
 from apps.accounts.api.utils import send_push_notification
 
@@ -133,6 +134,7 @@ class UserContactTaggingSerializer(ModelSerializer):
         request = self.context.get('request')
         report = self.context.get('report')
         user = request.user
+        infected_status = Status.objects.get(status="Infected")
         contact_user = User.objects.get(id=validated_data.pop('user_contacted'))
         contact_phone = getattr(contact_user, 'phone_number', None)
         contact_name = getattr(contact_user, 'first_name', None)
@@ -146,12 +148,6 @@ class UserContactTaggingSerializer(ModelSerializer):
                                                     user=user,
                                                     date_contacted=validated_data.get(
                                                         "date_contacted")).last()
-        if today_contact and contact_user.risk_level is False:
-            return UserContactTagging.objects.create(user_contact=today_contact, from_time=from_time,
-                                                     to_time=to_time, latitude=latitude,
-                                                     longitude=longitude,
-                                                     place_tag=place_tag,
-                                                     is_infected=False)
         if today_contact:
             delta = datetime.timedelta(minutes=8)
             start = (datetime.datetime.combine(datetime.date(9999, 1, 1),
@@ -166,9 +162,15 @@ class UserContactTaggingSerializer(ModelSerializer):
                 active_tag.to_time = to_time
                 active_tag.save()
                 return active_tag
+            if user.risk_level is False and contact_user.risk_level is False:
+                return UserContactTagging.objects.create(user_contact=today_contact, from_time=from_time,
+                                                         to_time=to_time, latitude=latitude,
+                                                         longitude=longitude,
+                                                         place_tag=place_tag,
+                                                         is_infected=False)
             morning_tag = UserContactTagging.objects.filter(user_contact=today_contact,
                                                             to_time__lte=start).order_by('-to_time').last()
-            if morning_tag and morning_tag.is_infected is False:
+            if morning_tag and morning_tag.is_infected is False and user.risk_level is False:
                 infected_contact = UserContacts.objects.filter(user=contact_user,
                                                                date_contacted=validated_data.get(
                                                                    "date_contacted"),

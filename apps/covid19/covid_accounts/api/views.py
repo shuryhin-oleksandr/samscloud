@@ -194,11 +194,21 @@ class UserReportStatusUpdateAPIView(RetrieveUpdateAPIView):
         try:
             user_report = UserReport.objects.get(user=self.request.user)
             user_report.status = status
+            if status.status == 'Infected':
+                user_report.test_result = "Positive"
+                user_report.is_tested = True
             user_report.save()
             serializer = UserReportStatusSerializer(user_report)
             return Response(serializer.data)
         except ObjectDoesNotExist:
-            user_report = UserReport.objects.create(disease=disease, status=status, user=self.request.user)
+            if status.status == 'Infected':
+                test_result = 'Positive'
+                is_tested = True
+            else:
+                test_result = 'Negative'
+                is_tested = False
+            user_report = UserReport.objects.create(disease=disease, status=status, user=self.request.user,
+                                                    test_result=test_result, is_tested=is_tested)
             serializer = UserReportStatusSerializer(user_report)
             return Response(serializer.data)
 
