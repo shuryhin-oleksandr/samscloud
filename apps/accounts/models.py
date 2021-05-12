@@ -120,6 +120,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     flight_exposure = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal('0.00'), validators=[MinValueValidator(Decimal('0.00'))])
     last_login = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(blank=True, null=True)
+    is_covid_status_hidden = models.BooleanField(default=False)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
