@@ -31,6 +31,7 @@ from rest_framework.serializers import (
     Serializer,
     SerializerMethodField,
     FileField,
+    BooleanField
 )
 
 User = get_user_model()
@@ -194,8 +195,8 @@ class OrganizationListSerializer(ModelSerializer):
             'dispatch',
             'alert',
             'phone_number',
-            'email'
-
+            'email',
+            'is_covid_active'
         ]
 
 
@@ -226,11 +227,13 @@ class UserOrganizationListSerializer(ModelSerializer):
     Serializer to list user organization details
     """
     organization = OrganizationListSerializer(read_only=True)
+    is_show_covid_info = BooleanField(required=True)
 
     class Meta:
         model = UserOrganization
         fields = [
             'organization',
+            'is_show_covid_info'
         ]
 
 
@@ -706,4 +709,12 @@ class MuteOrganisationSerializer(ModelSerializer):
         model = UserOrganization
         fields = (
             'is_muted',
+        )
+
+
+class UserOrganisationInfoSerializer(ModelSerializer):
+    class Meta:
+        model = UserOrganization
+        fields = (
+            'is_show_covid_info',
         )

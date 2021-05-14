@@ -852,7 +852,6 @@ class UserProfileSerializer(ModelSerializer):
             'city',
             'address',
             'zip',
-            'is_covid_status_hidden'
         ]
         read_only_fields = ("id", )
 
@@ -874,7 +873,6 @@ class UserDetailsSerializer(ModelSerializer):
             'city',
             'zip',
             'phone_number',
-            'is_covid_status_hidden'
         ]
 
     def to_representation(self, instance):

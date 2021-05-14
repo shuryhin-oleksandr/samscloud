@@ -53,7 +53,7 @@ from .serializers import (
     ZoneCCTVDeleteSerializer,
     ZoneCCTVGetSerializer,
     OrganizationListForLoginSerializer, OrganizationMessageSerializer, GetOrganizationMessageSerializer,
-    MuteOrganisationSerializer)
+    MuteOrganisationSerializer, UserOrganisationInfoSerializer)
 
 from apps.accounts.api.utils import (send_organization_activation_email,
                                      send_emergency_contact_mail,
@@ -115,6 +115,7 @@ class UserOrganizationListAPIView(ListAPIView):
         data = serializer.data
         new_res = []
         for i in range(0, len(data)):
+            data[i]['organization']['is_show_covid_info'] = data[i]['is_show_covid_info']
             new_res.append(data[i]['organization'])
         return Response(new_res, status=HTTP_200_OK)
 
@@ -618,6 +619,7 @@ class GetOrganizationMessageAPIView(RetrieveAPIView):
     queryset = OrganizationMessage.objects.all()
     permission_classes = [IsAuthenticated]
 
+
 class UpdateOrganizationMuteAPIView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MuteOrganisationSerializer
@@ -626,6 +628,17 @@ class UpdateOrganizationMuteAPIView(RetrieveUpdateAPIView):
         organisation_id = self.kwargs["organisation_id"]
         organisation = get_object_or_404(OrganizationProfile.objects.all(), pk=organisation_id)
         return UserOrganization.objects.get(user=self.request.user, organization=organisation)
+
+
+class UpdateOrganizationUserInfoAPIView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserOrganisationInfoSerializer
+
+    def get_object(self):
+        organisation_id = self.kwargs["organisation_id"]
+        organisation = get_object_or_404(OrganizationProfile.objects.all(), pk=organisation_id)
+        return UserOrganization.objects.get(user=self.request.user, organization=organisation)
+
 
 class UnsubscribeOrganizationAPIView(DestroyAPIView):
     """

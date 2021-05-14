@@ -79,7 +79,7 @@ class OrganizationProfile(TimeStampedModel):
     number_of_floors = models.CharField(max_length=20, null=True, blank=True)
     shinobi_authkey = models.CharField(max_length=100, null=True, blank=True)
     shinobi_group_key = models.CharField(max_length=100, null=True, blank=True)
-
+    is_covid_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.organization_name
@@ -89,6 +89,7 @@ class UserOrganization(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     organization = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
     is_muted = models.BooleanField(default=False)
+    is_show_covid_info = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name + self.organization.organization_name

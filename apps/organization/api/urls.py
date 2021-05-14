@@ -42,7 +42,7 @@ from .views import (
     ZoneCCTVDetailsAPIView,
     OrganizationListAPIView,
     OrganizationZoneCTVListAPIView, OrganizationMessageListCreateAPIView, GetOrganizationMessageAPIView,
-    UpdateOrganizationMuteAPIView, UnsubscribeOrganizationAPIView
+    UpdateOrganizationMuteAPIView, UnsubscribeOrganizationAPIView, UpdateOrganizationUserInfoAPIView
 )
 
 
@@ -61,6 +61,8 @@ urlpatterns = [
     path('create-organization-message/', OrganizationMessageListCreateAPIView.as_view(), name='create-organization-message'),
     path('get-organization-message/<int:id>', GetOrganizationMessageAPIView.as_view(), name='get-organization-message'),
     path('update-organization-mute/<int:organisation_id>', UpdateOrganizationMuteAPIView.as_view(), name='update-organization-mute'),
+    path('update-organization-user-info/<int:organisation_id>', UpdateOrganizationUserInfoAPIView.as_view(),
+         name='update-organization-user-info'),
     path('unsubscribe-organization/<int:organisation_id>', UnsubscribeOrganizationAPIView.as_view(),
          name='unsubscribe-organization'),
 
