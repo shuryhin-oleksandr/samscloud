@@ -22,7 +22,8 @@ from random import choice, randint
 from rest_framework.response import Response
 from django_rest_passwordreset.serializers import EmailSerializer, PasswordTokenSerializer
 
-from .utils import get_tokens_for_user, send_account_activation_email, send_twilio_sms, send_emergency_contact_mail, send_push_notification
+from .utils import get_tokens_for_user, send_account_activation_email, send_twilio_sms, send_emergency_contact_mail, \
+    send_push_notification, send_contact_mail
 import re
 from rest_framework.serializers import (
     CharField,
@@ -725,7 +726,10 @@ class EmergencyContactAddSerializer(ModelSerializer):
                     histroy = NotificationHistory(user=user_bj, requested_user=current_usr, attribute=data, requested_token=str(emergency_contact_obj.uuid), notification_type="accept_contact", message=message,
                                         title=title)
                     histroy.save()
-            send_emergency_contact_mail(request, emergency_contact_obj.uuid, name, email, contact_type)
+            if contact_type == 'Family':
+                send_contact_mail(request, emergency_contact_obj.uuid, name, email, contact_type)
+            else:
+                send_emergency_contact_mail(request, emergency_contact_obj.uuid, name, email, contact_type)
         if phone_number:
             message = "This is to inform you that your Contact has been added to %s's  %s contact list. Please click this link to confirm the request %s" % (
                 current_usr.first_name, contact_type, activate_url)

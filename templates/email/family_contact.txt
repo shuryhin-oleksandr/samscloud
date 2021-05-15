@@ -1,0 +1,17 @@
+{{contact_type}} Contact Added
+
+Dear {{ name }}
+
+Welcome to Samscloud
+
+This is to inform you that a request has been made to add your contact to {{ first_name }}’s contact list. As a contact, family and friends can connect and use our innovative safety features to coordinate and support their safety plans.
+
+Please click the button to confirm the request
+
+{{ activate_url }}&status=Accepted
+
+{{ activate_url }}&status=Rejected
+
+Thank You,
+
+Samscloud Support

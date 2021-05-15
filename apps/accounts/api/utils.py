@@ -123,6 +123,33 @@ def send_emergency_contact_mail(request, uuid, name, email, contact_type):
     send_email_for_user.delay(context, template_name, subject, recipients)
 
 
+def send_contact_mail(request, uuid, name, email, contact_type):
+    """
+    Welcome mail for family contacts.
+    :param request:
+    :param uuid:
+    :param name:
+    :param email:
+    :return:
+    """
+    template_name = 'email/family_contact'
+    subject = 'Samscloud incident from  %s ' % (request.user.first_nam)
+    recipients = email
+
+    activate_url = "{0}://{1}/emergency-contact/activate?uid={2}".format(request.scheme,
+                                                                         settings.FRONTEND_DOMAIN,
+                                                                         uuid
+                                                                         )
+
+    context = {
+        'first_name': request.user.first_name,
+        'name': name,
+        'activate_url': activate_url,
+        'contact_type': contact_type
+    }
+    send_email_for_user.delay(context, template_name, subject, recipients)
+
+
 def send_organization_email_activation(request, organization):
     """
     Function for organization activation mail
