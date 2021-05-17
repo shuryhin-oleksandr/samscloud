@@ -41,10 +41,12 @@ from ...reports.models import NotificationSettings, CurrentUserLocation, Notific
 
 User = get_user_model()
 
+
 class UsersListSerializer(ModelSerializer):
     """
     User List Serializer
     """
+
     class Meta:
         model = User
         fields = [
@@ -54,6 +56,8 @@ class UsersListSerializer(ModelSerializer):
             'email',
             'phone_number',
         ]
+
+
 class UserCreateSerializer(ModelSerializer):
     """
     User Register serializer
@@ -105,7 +109,8 @@ class UserCreateSerializer(ModelSerializer):
         password2 = data.get('confirm_password')
         if password1 != password2:
             raise ValidationError('Passwords Must Match')
-        if not re.match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_+\.])[\w\d~!@#$%^&*()_+\.]{6,}$", password1):
+        if not re.match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_+\.])[\w\d~!@#$%^&*()_+\.]{6,}$",
+                        password1):
             raise ValidationError(
                 'Your password has to be at least 6 characters long.'
                 ' Must contain at least one lower case letter, '
@@ -167,14 +172,14 @@ class UserActivationSerializer(Serializer):
         password2 = data.get('confirm_password')
         if password1 != password2:
             raise ValidationError('Passwords Must Match')
-        if not re.match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_+\.])[\w\d~!@#$%^&*()_+\.]{6,}$", password1):
+        if not re.match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_+\.])[\w\d~!@#$%^&*()_+\.]{6,}$",
+                        password1):
             raise ValidationError(
                 'Your password has to be at least 6 characters long.'
                 ' Must contain at least one lower case letter, '
                 'one upper case letter, one digit. at least one special character'
                 ' ~!@#$%^&*()_+.')
         return value
-
 
 
 class UserDetailUpdateSerializer(ModelSerializer):
@@ -210,8 +215,6 @@ class UserDetailUpdateSerializer(ModelSerializer):
         ]
 
 
-
-
 class UserLoginSerializer(ModelSerializer):
     """
     User Login Serializer
@@ -225,6 +228,7 @@ class UserLoginSerializer(ModelSerializer):
     profile_logo = serializers.SerializerMethodField(read_only=True)
     organization = CharField(required=False, write_only=True)
     organization_code = serializers.SerializerMethodField(read_only=False)
+
     class Meta:
         model = User
         fields = [
@@ -246,14 +250,22 @@ class UserLoginSerializer(ModelSerializer):
     def to_representation(self, instance):
         data = super(UserLoginSerializer, self).to_representation(instance)
         user = User.objects.get(id=instance.get('id'))
-        data.update({"state": user.state, "city": user.city, "zip": user.zip, "address": user.address, "first_name": user.first_name, "phone_number": user.phone_number, "last_name": user.last_name,})
+        data.update({"state": user.state, "city": user.city, "zip": user.zip, "address": user.address,
+                     "first_name": user.first_name, "phone_number": user.phone_number, "last_name": user.last_name, })
         try:
             location = CurrentUserLocation.objects.get(user=user)
             notification = NotificationSettings.objects.get(user=user)
-            data.update({"share_location": location.share_location, "new_message": notification.new_message, "contact_request": notification.contact_request, "contact_disable_location": notification.contact_disable_location,
-                         "crisis_emergency_alert": notification.crisis_emergency_alert, "contact_has_incident": notification.contact_has_incident, "send_incident_text": notification.send_incident_text,
-                         "send_incident_email": notification.send_incident_email, "app_tips": notification.app_tips, "new_updates": notification.new_updates, "bluetooth": notification.bluetooth,
-                         "nfc": notification.nfc, "siri_incident_start": notification.siri_incident_start, "auto_route_incident_organization": notification.auto_route_incident_organization, "auto_route_contacts": notification.auto_route_contacts,
+            data.update({"share_location": location.share_location, "new_message": notification.new_message,
+                         "contact_request": notification.contact_request,
+                         "contact_disable_location": notification.contact_disable_location,
+                         "crisis_emergency_alert": notification.crisis_emergency_alert,
+                         "contact_has_incident": notification.contact_has_incident,
+                         "send_incident_text": notification.send_incident_text,
+                         "send_incident_email": notification.send_incident_email, "app_tips": notification.app_tips,
+                         "new_updates": notification.new_updates, "bluetooth": notification.bluetooth,
+                         "nfc": notification.nfc, "siri_incident_start": notification.siri_incident_start,
+                         "auto_route_incident_organization": notification.auto_route_incident_organization,
+                         "auto_route_contacts": notification.auto_route_contacts,
                          "shake_activate_incident": notification.shake_activate_incident})
         except:
 
@@ -323,8 +335,6 @@ class UserLoginSerializer(ModelSerializer):
         return data
 
 
-
-
 user_detail_url = HyperlinkedIdentityField(
     view_name='accounts-api:detail',
     lookup_field='pk'
@@ -354,8 +364,6 @@ class UserListSerializer(ModelSerializer):
         ]
 
 
-
-
 class UserSerializer(ModelSerializer):
     """
     User Retrieve Update Serializer
@@ -371,6 +379,7 @@ class UserSerializer(ModelSerializer):
             'email',
             'address',
         ]
+
 
 class UserEmailSerializer(Serializer):
     """
@@ -504,7 +513,8 @@ class CustomPasswordTokenSerializer(PasswordTokenSerializer):
         password2 = data.get('confirm_password')
         if password1 != password2:
             raise ValidationError('Passwords must match')
-        if not re.match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_+\.])[\w\d~!@#$%^&*()_+\.]{6,}$", password1):
+        if not re.match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_+\.])[\w\d~!@#$%^&*()_+\.]{6,}$",
+                        password1):
             raise ValidationError(
                 'Your password has to be at least 6 characters long.'
                 ' Must contain at least one lower case letter, '
@@ -600,7 +610,7 @@ class EmergencyContactRequestCheckinSerializer(Serializer):
         current_usr = request.user
         user_obj = None
         try:
-            contact_id =attrs['contact_id']
+            contact_id = attrs['contact_id']
             contact_obj = EmergencyContact.objects.filter(id=contact_id)
             if not contact_obj:
                 raise serializers.ValidationError('No user found with this contact ID')
@@ -611,7 +621,7 @@ class EmergencyContactRequestCheckinSerializer(Serializer):
             if not user_obj:
                 raise serializers.ValidationError('User is not an app user')
         except EmergencyContact.DoesNotExist:
-                pass
+            pass
         return attrs
 
 
@@ -640,7 +650,6 @@ class ContactLocationUpdateerializer(Serializer):
         return attrs
 
 
-
 class EmergencyContactAddSerializer(ModelSerializer):
     """
     Serializer to add Emergency contact
@@ -649,7 +658,8 @@ class EmergencyContactAddSerializer(ModelSerializer):
 
     class Meta:
         model = EmergencyContact
-        exclude = ('status', 'request_checkin_updated', 'request_checkin_latitude', 'request_checkin_longitude', 'request_checkin_address',)
+        exclude = ('status', 'request_checkin_updated', 'request_checkin_latitude', 'request_checkin_longitude',
+                   'request_checkin_address',)
 
     def validate(self, attrs):
         try:
@@ -678,7 +688,7 @@ class EmergencyContactAddSerializer(ModelSerializer):
                 # else:
                 #     return attrs
             if 'phone_number' not in attrs and 'email' not in attrs:
-            # else:
+                # else:
                 raise serializers.ValidationError('Please provide phone number or email ID')
             else:
                 return attrs
@@ -701,10 +711,14 @@ class EmergencyContactAddSerializer(ModelSerializer):
                                                                 relationship=relationship, phone_number=phone_number,
                                                                 contact_type=contact_type)
 
-
-        activate_url = "{0}://{1}/emergency-contact/activate?uid={2}".format(request.scheme,
-                                                                             settings.FRONTEND_DOMAIN,
-                                                                             emergency_contact_obj.uuid)
+        if contact_type == 'Family':
+            activate_url = "{0}://{1}/contact/activate?uid={2}".format(request.scheme,
+                                                                       settings.FRONTEND_DOMAIN,
+                                                                       emergency_contact_obj.uuid)
+        else:
+            activate_url = "{0}://{1}/emergency-contact/activate?uid={2}".format(request.scheme,
+                                                                                 settings.FRONTEND_DOMAIN,
+                                                                                 emergency_contact_obj.uuid)
         print(activate_url)
 
         if email is not None:
@@ -720,11 +734,14 @@ class EmergencyContactAddSerializer(ModelSerializer):
                         "type": "accept_contact",
                         "token": str(emergency_contact_obj.uuid),
                     }
-                    message = "%s has added you as an %s contact. Please accept or reject" % (current_usr.first_name, contact_type)
+                    message = "%s has added you as an %s contact. Please accept or reject" % (
+                    current_usr.first_name, contact_type)
                     title = "You are added as %s contact" % (contact_type)
                     send_push_notification.delay(fcm_obj.id, title, message, data)
-                    histroy = NotificationHistory(user=user_bj, requested_user=current_usr, attribute=data, requested_token=str(emergency_contact_obj.uuid), notification_type="accept_contact", message=message,
-                                        title=title)
+                    histroy = NotificationHistory(user=user_bj, requested_user=current_usr, attribute=data,
+                                                  requested_token=str(emergency_contact_obj.uuid),
+                                                  notification_type="accept_contact", message=message,
+                                                  title=title)
                     histroy.save()
             if contact_type == 'Family':
                 send_contact_mail(request, emergency_contact_obj.uuid, name, email, contact_type)
@@ -777,7 +794,8 @@ class EmergencyContactDetailsSerializer(ModelSerializer):
 
     class Meta:
         model = EmergencyContact
-        exclude = ('request_checkin_updated', 'request_checkin_latitude', 'request_checkin_longitude', 'request_checkin_address',)
+        exclude = (
+        'request_checkin_updated', 'request_checkin_latitude', 'request_checkin_longitude', 'request_checkin_address',)
 
     def get_created_at(self, obj):
         return obj.created_at.strftime('%Y-%m-%d %H:%M:%S')
@@ -802,7 +820,6 @@ class EmergencyContactDetailsSerializer(ModelSerializer):
             address = None
         return address
 
-
     def get_profile_image(self, obj):
         profile_image = None
         profile_image_qs = None
@@ -824,7 +841,8 @@ class EmergencyContactDetailsSerializer(ModelSerializer):
             data_obj = {}
             user = User.objects.get(email=instance.email)
             location = CurrentUserLocation.objects.get(user=user)
-            data_obj.update({"location_share_location": location.share_location, "location_address": location.address, "location_latitude": location.latitude,
+            data_obj.update({"location_share_location": location.share_location, "location_address": location.address,
+                             "location_latitude": location.latitude,
                              "location_longitude": location.longitude, "location_last_updated": location.updated_at})
             data.update({"location_status": data_obj})
         except:
@@ -832,8 +850,10 @@ class EmergencyContactDetailsSerializer(ModelSerializer):
 
         try:
             checkin_data_obj = {}
-            checkin_data_obj.update({"request_checkin_address": instance.request_checkin_address, "request_checkin_latitude": instance.request_checkin_latitude,
-                             "request_checkin_longitude": instance.request_checkin_longitude, "request_checkin_last_updated": instance.request_checkin_updated})
+            checkin_data_obj.update({"request_checkin_address": instance.request_checkin_address,
+                                     "request_checkin_latitude": instance.request_checkin_latitude,
+                                     "request_checkin_longitude": instance.request_checkin_longitude,
+                                     "request_checkin_last_updated": instance.request_checkin_updated})
             data.update({"request_checkin_data": checkin_data_obj})
         except:
             data.update({"request_checkin_data": {}})
@@ -844,7 +864,6 @@ class UserProfileSerializer(ModelSerializer):
     """
     User profile detail serializer
     """
-
 
     class Meta:
         model = User
@@ -857,7 +876,8 @@ class UserProfileSerializer(ModelSerializer):
             'address',
             'zip',
         ]
-        read_only_fields = ("id", )
+        read_only_fields = ("id",)
+
 
 class UserDetailsSerializer(ModelSerializer):
     """
@@ -920,6 +940,7 @@ class UserNotificationSerializer(ModelSerializer):
         ]
         read_only_fields = ("id", "user ",)
 
+
 class UserCurrentLocationSerializer(ModelSerializer):
     """
     User Retrieve Update Serializer
@@ -936,6 +957,7 @@ class UserCurrentLocationSerializer(ModelSerializer):
         ]
         read_only_fields = ("id", "user ", "share_location",)
 
+
 class ShareLocationSerializer(ModelSerializer):
     """
     User Retrieve Update Serializer
@@ -951,6 +973,7 @@ class ShareLocationSerializer(ModelSerializer):
             'id',
         ]
         read_only_fields = ("id", "user ", "longitude", "address", "latitude",)
+
 
 class UserSettingsSerializer(ModelSerializer):
     """
@@ -969,6 +992,7 @@ class UserSettingsSerializer(ModelSerializer):
             'id',
         ]
         read_only_fields = ("id", "user ",)
+
 
 class NotificationHistorySerializer(ModelSerializer):
     """

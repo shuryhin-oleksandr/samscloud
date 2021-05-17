@@ -136,10 +136,10 @@ def send_contact_mail(request, uuid, name, email, contact_type):
     subject = 'Samscloud incident from  %s ' % (request.user.first_nam)
     recipients = email
 
-    activate_url = "{0}://{1}/emergency-contact/activate?uid={2}".format(request.scheme,
-                                                                         settings.FRONTEND_DOMAIN,
-                                                                         uuid
-                                                                         )
+    activate_url = "{0}://{1}/contact/activate?uid={2}".format(request.scheme,
+                                                               settings.FRONTEND_DOMAIN,
+                                                               uuid
+                                                               )
 
     context = {
         'first_name': request.user.first_name,
@@ -263,6 +263,7 @@ def send_incident_end_report(email, user_name, incident_user, reason):
     }
     send_email_for_user.delay(context, template_name, subject, recipients)
 
+
 def send_emergency_contact_status(email, user_name, contact_user, status):
     """
     Function to send incident end report to responders
@@ -281,6 +282,7 @@ def send_emergency_contact_status(email, user_name, contact_user, status):
         'reason': status
     }
     send_email_for_user.delay(context, template_name, subject, recipients)
+
 
 @task(name="send_email_for_user")
 def send_email_for_user(context, template_name, subject, recipient):
