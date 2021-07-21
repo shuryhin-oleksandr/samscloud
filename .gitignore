@@ -1,7 +1,10 @@
+*.pyc
 *.sqlite3
 media/
 *.db
 *.pid
 .idea/
+covid_env/
+env/
 *.iws /out/
 samscloud_api/local.py
