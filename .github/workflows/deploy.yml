@@ -18,3 +18,4 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           ${{ secrets.HOST_PATH }}/deploy.sh
+          
