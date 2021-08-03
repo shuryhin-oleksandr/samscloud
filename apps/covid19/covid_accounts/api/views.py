@@ -1,27 +1,37 @@
-import re
 import datetime
+import re
 from random import randint
 
-from django.shortcuts import render
-from rest_framework import status
-
-# Create your views here.
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveUpdateAPIView, ListAPIView, \
-    DestroyAPIView, get_object_or_404
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.generics import (ListCreateAPIView, CreateAPIView, RetrieveUpdateAPIView,
+                                     DestroyAPIView, get_object_or_404)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from rest_framework.views import APIView
-from django.core.exceptions import ObjectDoesNotExist
 
 from apps.accounts.models import User, MobileOtp
-from apps.covid19.covid_accounts.models import UserReport, Status, Disease, Lastupdated, UserTesting
-from apps.covid19.covid_accounts.api.serializers import UserCreateSerializer, MobileOTPSerializer, UserLoginSerializer, \
-    MobileNumberSerializer, UserReportSerializer, UserReportWriteSerializer, ForgotPasswordSerializer, \
-    ResetPasswordSerializer, MobileResetPasswordSerializer, UserReportListSerializer, MobilesNumberSerializer, \
-    StatusSerializer, UserSerializer, LastUpdatedListSerializer, UserTestingSerializer, UserTestingUpdateSerializer, \
-    UserReportStatusSerializer
+from apps.covid19.covid_accounts.api.serializers import (UserCreateSerializer, MobileOTPSerializer,
+                                                         UserLoginSerializer,
+                                                         MobileNumberSerializer,
+                                                         UserReportSerializer,
+                                                         UserReportWriteSerializer,
+                                                         ForgotPasswordSerializer,
+                                                         MobileResetPasswordSerializer,
+                                                         UserReportListSerializer,
+                                                         MobilesNumberSerializer,
+                                                         StatusSerializer,
+                                                         LastUpdatedListSerializer,
+                                                         UserTestingSerializer,
+                                                         UserTestingUpdateSerializer,
+                                                         UserReportStatusSerializer,
+                                                         ScreeningUserSerializer,
+                                                         ScreeningSerializer)
+from apps.covid19.covid_accounts.models import (UserReport, Status, Disease, Lastupdated,
+                                                UserTesting, ScreeningUser, Screening)
 from apps.covid19.covid_accounts.utils import get_tokens_for_user, send_twilio_sms
 
 
@@ -480,3 +490,25 @@ class UserTestingDeleteView(DestroyAPIView):
         last_updated.save()
         testing_id = self.kwargs["testing_id"]
         return get_object_or_404(UserTesting.objects.all(), pk=testing_id)
+
+
+class ScreeningViewSet(viewsets.ModelViewSet):
+    queryset = Screening.objects.all()
+    serializer_class = ScreeningSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class ScreeningUserViewSet(viewsets.ModelViewSet):
+    serializer_class = ScreeningUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ScreeningUser.objects.filter(user=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def get_last_result(self, request):
+        last_screening_user = request.user.screening.latest('answered_at')
+        if last_screening_user:
+            return Response(last_screening_user.get_status_display(), status=status.HTTP_200_OK)
+        return Response('User has no screenings yet', status=status.HTTP_400_BAD_REQUEST)
+

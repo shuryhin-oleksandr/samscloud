@@ -1,15 +1,13 @@
-from decimal import Decimal
-
-from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
-from django.core.validators import MinValueValidator
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from django.utils import timezone
-
 from apps.covid19.contacts.models import Disease, Symptoms
 from apps.covid19.vaccines.models import UserVaccine
+from utils.enums import STATUS_CHOICES
+from utils.table_names import (SCREENING_TABLE_NAME, SCREENING_QUESTION_TABLE_NAME,
+                               SCREENING_ANSWER_OPTION_TABLE_NAME, SCREENING_USER_TABLE_NAME,
+                               SCREENING_ANSWER_TABLE_NAME)
+
 User = get_user_model()
 
 
@@ -102,3 +100,86 @@ class Lastupdated(models.Model):
 
     def __str__(self):
         return self.updated_time
+
+
+class Screening(models.Model):
+    title = models.CharField(max_length=100)
+    time_at = models.TimeField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = SCREENING_TABLE_NAME
+        ordering = ('id',)
+
+    def __str__(self):
+        return f'Screening at {self.time_at}'
+
+
+class ScreeningQuestion(models.Model):
+    screening = models.ForeignKey(Screening, on_delete=models.CASCADE, related_name='question')
+    title = models.CharField(max_length=200)
+    multiple = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = SCREENING_QUESTION_TABLE_NAME
+        ordering = ('id',)
+
+
+class ScreeningAnswerOption(models.Model):
+    question = models.ForeignKey(ScreeningQuestion, on_delete=models.CASCADE, related_name='option')
+    text = models.CharField(max_length=200)
+    is_symptom = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = SCREENING_ANSWER_OPTION_TABLE_NAME
+        ordering = ('id',)
+
+
+class ScreeningUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='screening')
+    screening = models.ForeignKey(Screening, on_delete=models.CASCADE, related_name='screening')
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES)
+    answered_at = models.DateTimeField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.screening_answer.filter(screening_answer_option__is_symptom=True).exists():
+            self.status = 'Need test'
+        else:
+            self.status = 'OK'
+        super().save(*args, **kwargs)
+
+    class Meta:
+        db_table = SCREENING_USER_TABLE_NAME
+        ordering = ('id',)
+
+
+class ScreeningAnswer(models.Model):
+    screening_answer_option = models.ForeignKey(
+        ScreeningAnswerOption,
+        on_delete=models.CASCADE,
+        related_name='screening_answer'
+    )
+    screening_user = models.ForeignKey(
+        ScreeningUser,
+        on_delete=models.CASCADE,
+        related_name='screening_answer'
+    )
+    filled = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = SCREENING_ANSWER_TABLE_NAME
+        ordering = ('id',)

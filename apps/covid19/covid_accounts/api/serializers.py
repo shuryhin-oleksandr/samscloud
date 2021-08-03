@@ -1,9 +1,7 @@
 import datetime
 import re
-import os
 from random import randint
 
-import django
 import requests
 from django.utils import timezone
 from rest_framework import serializers
@@ -12,13 +10,15 @@ from rest_framework.fields import CharField, EmailField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from apps.accounts.models import User, MobileOtp
-from apps.covid19.covid_accounts.models import UserReport, Status, Lastupdated, UserTesting
-from apps.covid19.covid_accounts.utils import send_twilio_sms, get_tokens_for_user
-from apps.covid19.contacts.models import Symptoms, Disease, UserContacts
 from apps.covid19.contacts.api.serializers import SymptomsSerializer
-from apps.covid19.vaccines.api.serializers import UserVaccineSerializer
+from apps.covid19.contacts.models import Symptoms, Disease, UserContacts
+from apps.covid19.covid_accounts.models import (UserReport, Status, Lastupdated, UserTesting,
+                                                ScreeningUser, ScreeningAnswer, Screening,
+                                                ScreeningQuestion, ScreeningAnswerOption)
+from apps.covid19.covid_accounts.utils import send_twilio_sms, get_tokens_for_user
 from apps.covid19.flight.models import FlightDetails
 from apps.covid19.location.models import UserLocations
+from apps.covid19.vaccines.api.serializers import UserVaccineSerializer
 from apps.covid19.vaccines.models import UserVaccine
 
 
@@ -905,3 +905,151 @@ class LastUpdatedListSerializer(ModelSerializer):
         model = Lastupdated
         fields = "__all__"
         read_only_fields = ("id", "date_created",)
+
+
+class ScreeningAnswerSerializer(ModelSerializer):
+    """
+    ScreeningAnswer serializer
+    """
+    class Meta:
+        model = ScreeningAnswer
+        fields = '__all__'
+
+
+class ScreeningAnswerOptionSerializer(ModelSerializer):
+    question = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = ScreeningAnswerOption
+        fields = '__all__'
+
+
+class ScreeningQuestionSerializer(ModelSerializer):
+    """
+    ScreeningQuestion serializer
+    """
+    screening = serializers.IntegerField(required=False)
+    options = ScreeningAnswerOptionSerializer(many=True, required=False)
+
+    class Meta:
+        model = ScreeningQuestion
+        fields = '__all__'
+
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', [])
+        sq = ScreeningQuestion.objects.create(**validated_data)
+        for option_data in options_data:
+            ScreeningAnswerOption.objects.create(question=sq, **option_data)
+        return sq
+
+    def update(self, instance, validated_data):
+        options_data = validated_data.pop('options', [])
+        ScreeningQuestion.objects.filter(id=instance.id).update('validated_data')
+        instance.refresh_from_db()
+        if options_data:
+            actual_options = set()
+            for option_data in options_data:
+                option_id = option_data.pop('id', None)
+                if option_id:
+                    ScreeningAnswerOption.objects.filter(id=option_id).update(**option_data)
+                else:
+                    option_id = ScreeningAnswerOption.objects.create(
+                        question=instance,
+                        **option_data
+                    )
+                actual_options.add(option_id)
+            instance.options.exclude(id__in=actual_options).delete()
+        return instance
+
+
+class ScreeningSerializer(ModelSerializer):
+    """
+    Screening serializer
+    """
+    questions = ScreeningQuestionSerializer(many=True, required=False)
+
+    class Meta:
+        model = Screening
+        fields = '__all__'
+
+    def create(self, validated_data):
+        questions_data = validated_data.pop('questions', [])
+        s = Screening.objects.create(**validated_data)
+        for question_data in questions_data:
+            options_data = question_data.pop('options', [])
+            q = ScreeningQuestion.objects.create(screening=s, **question_data)
+            for option_data in options_data:
+                ScreeningAnswerOption.objects.create(question=q, **option_data)
+        return s
+
+    def update(self, instance, validated_data):
+        questions_data = validated_data.pop('questions', [])
+        Screening.objects.filter(id=instance.id).update(**validated_data)
+        instance.refresh_from_db()
+        if questions_data:
+            actual_questions = set()
+            for question_data in questions_data:
+                question_id = question_data.pop('id', None)
+                options_data = question_data.pop('options', [])
+                if question_id:
+                    ScreeningQuestion.objects.filter(id=question_id).update(**question_data)
+                else:
+                    question_id = ScreeningQuestion.objects.create(
+                        screening=instance,
+                        **question_data
+                    ).id
+                actual_questions.add(question_id)
+                if options_data:
+                    actual_options = set()
+                    for option_data in options_data:
+                        option_id = option_data.pop('id', None)
+                        if option_id:
+                            ScreeningAnswerOption.objects.filter(id=option_id).update(**option_data)
+                        else:
+                            option_id = ScreeningAnswerOption.objects.create(
+                                question__id=question_id,
+                                **option_data
+                            ).id
+                        actual_options.add(option_id)
+                    ScreeningAnswerOption.objects.filter(question_id=question_id).exclude(
+                        id__in=actual_options).delete()
+                actual_questions.add(question_id)
+            instance.question.exclude(id__in=actual_questions).delete()
+        return instance
+
+
+class ScreeningUserSerializer(ModelSerializer):
+    """
+    ScreeningUser serializer
+    """
+    answers = ScreeningAnswerSerializer(many=True, required=False)
+
+    class Meta:
+        model = ScreeningUser
+        fields = '__all__'
+
+    def create(self, validated_data):
+        answers_data = validated_data.pop('answers', [])
+        su = ScreeningUser.objects.create(**validated_data)
+        for answer_data in answers_data:
+            ScreeningAnswer.objects.create(screening_user=su, **answer_data)
+        return su
+
+    def update(self, instance, validated_data):
+        answers_data = validated_data.pop('answers', [])
+        ScreeningUser.objects.filter(pk=instance.pk).update(**validated_data)
+        instance.refresh_from_db()
+        if answers_data:
+            actual_answers = set()
+            for answer_data in answers_data:
+                answer_id = answer_data.pop('id', None)
+                if answer_id:
+                    ScreeningAnswer.objects.filter(id=answer_id).update(**answer_data)
+                else:
+                    answer_id = ScreeningAnswer.objects.create(
+                        screening_user=instance,
+                        **answer_data
+                    ).id
+                actual_answers.add(answer_id)
+            instance.screening_answers.exclude(id__in=actual_answers).delete()
+        return instance
