@@ -28,10 +28,18 @@ from apps.covid19.covid_accounts.api.serializers import (UserCreateSerializer, M
                                                          UserTestingSerializer,
                                                          UserTestingUpdateSerializer,
                                                          UserReportStatusSerializer,
+                                                         ScreeningUserDetailSerializer,
+                                                         ScreeningDetailSerializer,
+                                                         ScreeningSerializer,
                                                          ScreeningUserSerializer,
-                                                         ScreeningSerializer)
+                                                         ScreeningQuestionDetailSerializer,
+                                                         ScreeningQuestionSerializer,
+                                                         ScreeningQuestionOptionSerializer,
+                                                         ScreeningAnswerSerializer)
 from apps.covid19.covid_accounts.models import (UserReport, Status, Disease, Lastupdated,
-                                                UserTesting, ScreeningUser, Screening)
+                                                UserTesting, ScreeningUser, Screening,
+                                                ScreeningQuestion, ScreeningQuestionOption,
+                                                ScreeningAnswer)
 from apps.covid19.covid_accounts.utils import get_tokens_for_user, send_twilio_sms
 
 
@@ -494,21 +502,51 @@ class UserTestingDeleteView(DestroyAPIView):
 
 class ScreeningViewSet(viewsets.ModelViewSet):
     queryset = Screening.objects.all()
-    serializer_class = ScreeningSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ScreeningDetailSerializer
+        return ScreeningSerializer
+
+
+class ScreeningQuestionViewSet(viewsets.ModelViewSet):
+    queryset = ScreeningQuestion.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ScreeningQuestionDetailSerializer
+        return ScreeningQuestionSerializer
+
+
+class ScreeningQuestionOptionViewSet(viewsets.ModelViewSet):
+    queryset = ScreeningQuestionOption.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ScreeningQuestionOptionSerializer
 
 
 class ScreeningUserViewSet(viewsets.ModelViewSet):
-    serializer_class = ScreeningUserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return ScreeningUser.objects.filter(user=self.request.user)
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ScreeningUserDetailSerializer
+        return ScreeningUserSerializer
+
     @action(detail=False, methods=['get'])
     def get_last_result(self, request):
-        last_screening_user = request.user.screening.latest('answered_at')
-        if last_screening_user:
-            return Response(last_screening_user.get_status_display(), status=status.HTTP_200_OK)
-        return Response('User has no screenings yet', status=status.HTTP_400_BAD_REQUEST)
+        try:
+            last_screening_user = request.user.screening_users.latest('answered_at')
+            return Response(last_screening_user.status, status=status.HTTP_200_OK)
+        except ScreeningUser.DoesNotExist:
+            return Response('User has no screenings yet', status=status.HTTP_400_BAD_REQUEST)
 
+
+class ScreeningAnswerViewSet(viewsets.ModelViewSet):
+    queryset = ScreeningAnswer.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ScreeningAnswerSerializer

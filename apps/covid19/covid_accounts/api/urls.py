@@ -10,7 +10,8 @@ from .views import (UserCreateAPIView, VerifyMobileOTPAPIView, UserLoginAPIView,
                     StatusCreateAPIView, LastUpdatedAPIView, UserTestingCreateAPIView,
                     UpdateUserTestingDetails,
                     UserTestingDeleteView, UserReportStatusUpdateAPIView, ScreeningUserViewSet,
-                    ScreeningViewSet)
+                    ScreeningViewSet, ScreeningAnswerViewSet, ScreeningQuestionViewSet,
+                    ScreeningQuestionOptionViewSet)
 
 urlpatterns = [
     path('', UserCreateAPIView.as_view(), name='user_list_create'),
@@ -36,5 +37,8 @@ router = SimpleRouter()
 
 router.register('screenings', ScreeningViewSet, 'screening')
 router.register('screening-users', ScreeningUserViewSet, 'screening-user')
+router.register('screening-answers', ScreeningAnswerViewSet, 'screening-user')
+router.register('screening-questions', ScreeningQuestionViewSet, 'screening-user')
+router.register('screening-question-options', ScreeningQuestionOptionViewSet, 'screening-user')
 
 urlpatterns += router.urls
