@@ -3,7 +3,7 @@ from django.db import models
 
 from apps.covid19.contacts.models import Disease, Symptoms
 from apps.covid19.vaccines.models import UserVaccine
-from utils.enums import STATUS_CHOICES
+from utils.enums import STATUS_CHOICES, SCREENING_OK_STATUS, SCREENING_NEED_TEST_STATUS
 from utils.table_names import (SCREENING_TABLE_NAME, SCREENING_QUESTION_TABLE_NAME,
                                SCREENING_ANSWER_OPTION_TABLE_NAME, SCREENING_USER_TABLE_NAME,
                                SCREENING_ANSWER_TABLE_NAME)
@@ -154,9 +154,9 @@ class ScreeningUser(models.Model):
 
     def save(self, *args, **kwargs):
         if self.screening_answer.filter(screening_answer_option__is_symptom=True).exists():
-            self.status = 'Need test'
+            self.status = SCREENING_NEED_TEST_STATUS
         else:
-            self.status = 'OK'
+            self.status = SCREENING_OK_STATUS
         super().save(*args, **kwargs)
 
     class Meta:
