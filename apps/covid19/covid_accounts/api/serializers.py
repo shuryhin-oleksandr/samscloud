@@ -913,13 +913,13 @@ class ScreeningAnswerSerializer(ModelSerializer):
     """
     class Meta:
         model = ScreeningAnswer
-        fields = '__all__'
+        fields = ('id', 'screening_answer_option', 'screening_user', 'filled')
 
 
 class ScreeningQuestionOptionSerializer(ModelSerializer):
     class Meta:
         model = ScreeningQuestionOption
-        fields = '__all__'
+        fields = ('id', 'question', 'text', 'is_symptom')
 
 
 class ScreeningQuestionDetailSerializer(ModelSerializer):
@@ -930,13 +930,13 @@ class ScreeningQuestionDetailSerializer(ModelSerializer):
 
     class Meta:
         model = ScreeningQuestion
-        fields = '__all__'
+        fields = ('id', 'screening', 'title', 'multiple', 'options')
 
 
 class ScreeningQuestionSerializer(ModelSerializer):
     class Meta:
         model = ScreeningQuestion
-        fields = '__all__'
+        fields = ('id', 'screening', 'title', 'multiple')
 
 
 class ScreeningDetailSerializer(ModelSerializer):
@@ -947,27 +947,27 @@ class ScreeningDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Screening
-        fields = '__all__'
+        fields = ('id', 'title', 'time_at', 'questions')
 
 
 class ScreeningSerializer(ModelSerializer):
     class Meta:
         model = Screening
-        fields = '__all__'
+        fields = ('id', 'title', 'time_at')
 
 
 class ScreeningUserDetailSerializer(ModelSerializer):
     """
     ScreeningUser serializer
     """
-    answers = ScreeningAnswerSerializer(many=True)
+    screening_answers = ScreeningAnswerSerializer(many=True)
 
     class Meta:
         model = ScreeningUser
-        fields = '__all__'
+        fields = ('id', 'user', 'screening', 'answered_at', 'status', 'screening_answers')
 
 
 class ScreeningUserSerializer(ModelSerializer):
     class Meta:
         model = ScreeningUser
-        fields = '__all__'
+        fields = ('id', 'user', 'screening', 'answered_at', 'status')
