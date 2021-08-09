@@ -1,10 +1,17 @@
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from .views import UserCreateAPIView, VerifyMobileOTPAPIView, UserLoginAPIView, \
-    ResendMobileNumberOTPAPIView, UserReportCreateAPIView, UpdateReportDetails, ForgotPasswordAPIView, \
-    ForgotPasswordVerifyAPIView, ResetPasswordAPIView, UserReportLocationListAPIView, SendMobileNumberOTPAPIView, \
-    StatusCreateAPIView, LastUpdatedAPIView, UserTestingCreateAPIView, UpdateUserTestingDetails, \
-    UserTestingDeleteView, UserReportStatusUpdateAPIView
+from .views import (UserCreateAPIView, VerifyMobileOTPAPIView, UserLoginAPIView,
+                    ResendMobileNumberOTPAPIView, UserReportCreateAPIView, UpdateReportDetails,
+                    ForgotPasswordAPIView,
+                    ForgotPasswordVerifyAPIView, ResetPasswordAPIView,
+                    UserReportLocationListAPIView,
+                    SendMobileNumberOTPAPIView,
+                    StatusCreateAPIView, LastUpdatedAPIView, UserTestingCreateAPIView,
+                    UpdateUserTestingDetails,
+                    UserTestingDeleteView, UserReportStatusUpdateAPIView, ScreeningUserViewSet,
+                    ScreeningViewSet, ScreeningAnswerViewSet, ScreeningQuestionViewSet,
+                    ScreeningQuestionOptionViewSet)
 
 urlpatterns = [
     path('', UserCreateAPIView.as_view(), name='user_list_create'),
@@ -25,3 +32,13 @@ urlpatterns = [
     path("user-testing/<int:testing_id>/update/", UpdateUserTestingDetails.as_view(), name="update_user_testing"),
     path("user-testing/<int:testing_id>/delete/", UserTestingDeleteView.as_view(), name="delete_user_testing"),
 ]
+
+router = SimpleRouter()
+
+router.register('screenings', ScreeningViewSet, 'screening')
+router.register('screening-users', ScreeningUserViewSet, 'screening-user')
+router.register('screening-answers', ScreeningAnswerViewSet, 'screening-user')
+router.register('screening-questions', ScreeningQuestionViewSet, 'screening-user')
+router.register('screening-question-options', ScreeningQuestionOptionViewSet, 'screening-user')
+
+urlpatterns += router.urls

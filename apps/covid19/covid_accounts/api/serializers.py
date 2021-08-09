@@ -1,9 +1,7 @@
 import datetime
 import re
-import os
 from random import randint
 
-import django
 import requests
 from django.utils import timezone
 from rest_framework import serializers
@@ -12,13 +10,15 @@ from rest_framework.fields import CharField, EmailField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from apps.accounts.models import User, MobileOtp
-from apps.covid19.covid_accounts.models import UserReport, Status, Lastupdated, UserTesting
-from apps.covid19.covid_accounts.utils import send_twilio_sms, get_tokens_for_user
-from apps.covid19.contacts.models import Symptoms, Disease, UserContacts
 from apps.covid19.contacts.api.serializers import SymptomsSerializer
-from apps.covid19.vaccines.api.serializers import UserVaccineSerializer
+from apps.covid19.contacts.models import Symptoms, Disease, UserContacts
+from apps.covid19.covid_accounts.models import (UserReport, Status, Lastupdated, UserTesting,
+                                                ScreeningUser, ScreeningAnswer, Screening,
+                                                ScreeningQuestion, ScreeningQuestionOption)
+from apps.covid19.covid_accounts.utils import send_twilio_sms, get_tokens_for_user
 from apps.covid19.flight.models import FlightDetails
 from apps.covid19.location.models import UserLocations
+from apps.covid19.vaccines.api.serializers import UserVaccineSerializer
 from apps.covid19.vaccines.models import UserVaccine
 
 
@@ -905,3 +905,69 @@ class LastUpdatedListSerializer(ModelSerializer):
         model = Lastupdated
         fields = "__all__"
         read_only_fields = ("id", "date_created",)
+
+
+class ScreeningAnswerSerializer(ModelSerializer):
+    """
+    ScreeningAnswer serializer
+    """
+    class Meta:
+        model = ScreeningAnswer
+        fields = ('id', 'screening_answer_option', 'screening_user', 'filled')
+
+
+class ScreeningQuestionOptionSerializer(ModelSerializer):
+    class Meta:
+        model = ScreeningQuestionOption
+        fields = ('id', 'question', 'text', 'is_symptom')
+
+
+class ScreeningQuestionDetailSerializer(ModelSerializer):
+    """
+    ScreeningQuestion serializer
+    """
+    options = ScreeningQuestionOptionSerializer(many=True)
+
+    class Meta:
+        model = ScreeningQuestion
+        fields = ('id', 'screening', 'title', 'multiple', 'options')
+
+
+class ScreeningQuestionSerializer(ModelSerializer):
+    class Meta:
+        model = ScreeningQuestion
+        fields = ('id', 'screening', 'title', 'multiple')
+
+
+class ScreeningDetailSerializer(ModelSerializer):
+    """
+    Screening serializer for retrieve action
+    """
+    questions = ScreeningQuestionDetailSerializer(many=True)
+
+    class Meta:
+        model = Screening
+        fields = ('id', 'title', 'time_at', 'questions')
+
+
+class ScreeningSerializer(ModelSerializer):
+    class Meta:
+        model = Screening
+        fields = ('id', 'title', 'time_at')
+
+
+class ScreeningUserDetailSerializer(ModelSerializer):
+    """
+    ScreeningUser serializer
+    """
+    screening_answers = ScreeningAnswerSerializer(many=True)
+
+    class Meta:
+        model = ScreeningUser
+        fields = ('id', 'user', 'screening', 'answered_at', 'status', 'screening_answers')
+
+
+class ScreeningUserSerializer(ModelSerializer):
+    class Meta:
+        model = ScreeningUser
+        fields = ('id', 'user', 'screening', 'answered_at', 'status')

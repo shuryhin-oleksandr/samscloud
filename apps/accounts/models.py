@@ -179,6 +179,14 @@ class TimeStampedModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class AbstractTimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class ForgotPasswordOTP(models.Model):
     otp = models.CharField(max_length=5, blank=True, null=True)
     user = models.ForeignKey("User", on_delete=models.CASCADE)
