@@ -3,6 +3,8 @@ from django.utils import timezone
 from rest_framework import filters
 from rest_framework.exceptions import ValidationError
 
+from apps.covid19.covid_accounts.models import ScreeningUser
+
 PERIOD_DAYS = {
     'day': 1,
     'week': 7,
@@ -47,8 +49,7 @@ class DashboardResultsFilter(filters.BaseFilterBackend):
             )
         ).distinct().count()
 
-        # TODO add check_ins count logic
-        check_ins = 0
+        check_ins = ScreeningUser.objects.filter(created_at__gte=date_start).count()
 
         subscribers = queryset.filter(is_subscribed=True).count()
         return devices, check_ins, subscribers
