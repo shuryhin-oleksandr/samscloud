@@ -1,15 +1,14 @@
-from decimal import Decimal
-
-from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
-from django.core.validators import MinValueValidator
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from django.utils import timezone
-
+from apps.accounts.models import AbstractTimeStampedModel
 from apps.covid19.contacts.models import Disease, Symptoms
 from apps.covid19.vaccines.models import UserVaccine
+from utils.constants import SCREENING_OK_STATUS, SCREENING_NEED_TEST_STATUS
+from utils.table_names import (SCREENING_TABLE_NAME, SCREENING_QUESTION_TABLE_NAME,
+                               SCREENING_ANSWER_OPTION_TABLE_NAME, SCREENING_USER_TABLE_NAME,
+                               SCREENING_ANSWER_TABLE_NAME)
+
 User = get_user_model()
 
 
@@ -102,3 +101,82 @@ class Lastupdated(models.Model):
 
     def __str__(self):
         return self.updated_time
+
+
+class Screening(AbstractTimeStampedModel):
+    title = models.CharField(max_length=100)
+    time_at = models.TimeField()
+
+    class Meta:
+        db_table = SCREENING_TABLE_NAME
+        ordering = ('id',)
+
+    def __str__(self):
+        return f'Screening at {self.time_at}'
+
+
+class ScreeningQuestion(AbstractTimeStampedModel):
+    screening = models.ForeignKey(Screening, on_delete=models.CASCADE, related_name='questions')
+    title = models.CharField(max_length=200)
+    multiple = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = SCREENING_QUESTION_TABLE_NAME
+        ordering = ('id',)
+
+
+class ScreeningQuestionOption(AbstractTimeStampedModel):
+    question = models.ForeignKey(
+        ScreeningQuestion,
+        on_delete=models.CASCADE,
+        related_name='options'
+    )
+    text = models.CharField(max_length=200)
+    is_symptom = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = SCREENING_ANSWER_OPTION_TABLE_NAME
+        ordering = ('id',)
+
+
+class ScreeningUser(AbstractTimeStampedModel):
+    user = models.ForeignKey(
+        User,
+        related_name='screening_users',
+        on_delete=models.CASCADE,
+    )
+    screening = models.ForeignKey(
+        Screening,
+        related_name='screening_users',
+        on_delete=models.CASCADE,
+    )
+    answered_at = models.DateTimeField()
+
+    @property
+    def status(self):
+        if self.screening_answers.filter(screening_answer_option__is_symptom=True).exists():
+            return SCREENING_NEED_TEST_STATUS
+        else:
+            return SCREENING_OK_STATUS
+
+    class Meta:
+        db_table = SCREENING_USER_TABLE_NAME
+        ordering = ('id',)
+
+
+class ScreeningAnswer(AbstractTimeStampedModel):
+    screening_answer_option = models.ForeignKey(
+        ScreeningQuestionOption,
+        on_delete=models.CASCADE,
+        related_name='screening_answers'
+    )
+    screening_user = models.ForeignKey(
+        ScreeningUser,
+        on_delete=models.CASCADE,
+        related_name='screening_answers'
+    )
+    filled = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = SCREENING_ANSWER_TABLE_NAME
+        ordering = ('id',)
