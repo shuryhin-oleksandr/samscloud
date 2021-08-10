@@ -37,8 +37,8 @@ MEDIA_URL = '/media/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'AKIAQDHHFW26MJEYB4G3'
-EMAIL_HOST_PASSWORD = 'BBPPY5AnBmVHbY4V6Pynzm7VfT8jIjICC1TP96vKy4ex'
+EMAIL_HOST_USER = 'AKIAQDHHFW26CLE7TVF3'
+EMAIL_HOST_PASSWORD = 'BAc8hlTheFN20TQl+K6FDzatz4LGrQx02x8VOHatztHw'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'notifications@samscloud.io'
 
@@ -83,6 +83,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TASK_DEFAULT_QUEUE = 'samscloud'
 
 # s3 settings
 #AWS_ACCESS_KEY_ID = 'AKIAQDHHFW26HQ2VZKFK'
