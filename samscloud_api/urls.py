@@ -41,11 +41,7 @@ urlpatterns = [
     path('api/covid19/contacts/',
          include(('apps.covid19.contacts.api.urls', 'apps.covid19.contacts'), namespace='covid19-contacts-api')),
     path('api/covid19/dashboard/',
-<<<<<<< HEAD
-         include(('apps.covid19.dashboard.urls', 'apps.covid19.dashboard'), namespace='covid19-contacts')),
-=======
          include(('apps.covid19.dashboard.urls', 'apps.covid19.dashboard'), namespace='covid19-dashboard')),
->>>>>>> master
     path('api/covid19/flight/',
          include(('apps.covid19.flight.api.urls', 'apps.covid19.flight'), namespace='covid19-flight-api')),
     path('api/covid19/location/',
